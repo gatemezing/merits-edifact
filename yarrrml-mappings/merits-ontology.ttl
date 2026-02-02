@@ -1,0 +1,269 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix schema: <http://schema.org/> .
+@prefix merits: <http://example.org/merits/ontology#> .
+
+<http://example.org/merits/ontology> a owl:Ontology ;
+    dct:title "MERITS Railway Data Ontology" ;
+    dct:description "Ontology for representing MERITS EDIFACT railway timetable and location data" ;
+    dct:created "2025-02-02"^^xsd:date ;
+    rdfs:comment "This ontology represents railway transportation data from SKDUPD (timetable) and TSDUPD (location) messages." .
+
+# Classes
+
+merits:MessageMetadata a owl:Class ;
+    rdfs:label "Message Metadata" ;
+    rdfs:comment "Metadata about EDIFACT message including validity period and originator" .
+
+merits:Train a owl:Class ;
+    rdfs:subClassOf schema:TrainTrip ;
+    rdfs:label "Train" ;
+    rdfs:comment "Represents a train service with its operating characteristics" .
+
+merits:PointOfRoute a owl:Class ;
+    rdfs:subClassOf schema:TrainStation ;
+    rdfs:label "Point of Route" ;
+    rdfs:comment "A stop on a train's route with arrival/departure times" .
+
+merits:TrainConnection a owl:Class ;
+    rdfs:subClassOf schema:TrainConnection ;
+    rdfs:label "Train Connection" ;
+    rdfs:comment "Connection information between trains at a specific station" .
+
+merits:OriginDestinationInfo a owl:Class ;
+    rdfs:label "Origin-Destination Information" ;
+    rdfs:comment "Information about train service between specific origin and destination stops" .
+
+merits:Stop a owl:Class ;
+    rdfs:subClassOf schema:TrainStation, schema:Place ;
+    rdfs:label "Stop" ;
+    rdfs:comment "A railway station or stop location" .
+
+merits:StationSynonym a owl:Class ;
+    rdfs:label "Station Synonym" ;
+    rdfs:comment "Alternative name or code for a railway station" .
+
+merits:MinimumConnectionTime a owl:Class ;
+    rdfs:subClassOf schema:TransferAction ;
+    rdfs:label "Minimum Connection Time" ;
+    rdfs:comment "Minimum time required for transferring between trains at a station" .
+
+merits:Footpath a owl:Class ;
+    rdfs:subClassOf schema:WalkAction ;
+    rdfs:label "Footpath" ;
+    rdfs:comment "Walking connection between railway stations" .
+
+# Object Properties
+
+merits:belongsToTrain a owl:ObjectProperty ;
+    rdfs:label "belongs to train" ;
+    rdfs:domain merits:PointOfRoute ;
+    rdfs:range merits:Train ;
+    rdfs:comment "Links a point of route to its parent train service" .
+
+merits:atPointOfRoute a owl:ObjectProperty ;
+    rdfs:label "at point of route" ;
+    rdfs:domain merits:TrainConnection ;
+    rdfs:range merits:PointOfRoute ;
+    rdfs:comment "Links a connection to the station where it occurs" .
+
+merits:forStop a owl:ObjectProperty ;
+    rdfs:label "for stop" ;
+    rdfs:domain merits:StationSynonym ;
+    rdfs:range merits:Stop ;
+    rdfs:comment "Links a synonym to its corresponding stop" .
+
+merits:atStop a owl:ObjectProperty ;
+    rdfs:label "at stop" ;
+    rdfs:range merits:Stop ;
+    rdfs:comment "Links an entity to a specific stop location" .
+
+merits:fromStop a owl:ObjectProperty ;
+    rdfs:label "from stop" ;
+    rdfs:range merits:Stop ;
+    rdfs:comment "Origin stop of a connection or footpath" .
+
+# Data Properties - Temporal
+
+merits:validityPeriodStart a owl:DatatypeProperty ;
+    rdfs:label "validity period start" ;
+    rdfs:domain merits:MessageMetadata ;
+    rdfs:range xsd:date .
+
+merits:validityPeriodEnd a owl:DatatypeProperty ;
+    rdfs:label "validity period end" ;
+    rdfs:domain merits:MessageMetadata ;
+    rdfs:range xsd:date .
+
+merits:arrivalTime a owl:DatatypeProperty ;
+    rdfs:label "arrival time" ;
+    rdfs:domain merits:PointOfRoute ;
+    rdfs:range xsd:time .
+
+merits:departureTime a owl:DatatypeProperty ;
+    rdfs:label "departure time" ;
+    rdfs:domain merits:PointOfRoute ;
+    rdfs:range xsd:time .
+
+merits:arrivalOffset a owl:DatatypeProperty ;
+    rdfs:label "arrival offset" ;
+    rdfs:domain merits:PointOfRoute ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Day offset for arrival (e.g., 1 means next day)" .
+
+merits:departureOffset a owl:DatatypeProperty ;
+    rdfs:label "departure offset" ;
+    rdfs:domain merits:PointOfRoute ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Day offset for departure (e.g., 1 means next day)" .
+
+# Data Properties - Identifiers and Codes
+
+merits:uicCode a owl:DatatypeProperty ;
+    rdfs:label "UIC code" ;
+    rdfs:comment "Universal Identification Code for railway stations" ;
+    rdfs:range xsd:string .
+
+merits:serviceNumber a owl:DatatypeProperty ;
+    rdfs:label "service number" ;
+    rdfs:domain merits:Train ;
+    rdfs:range xsd:string .
+
+merits:serviceName a owl:DatatypeProperty ;
+    rdfs:label "service name" ;
+    rdfs:domain merits:Train ;
+    rdfs:range xsd:string .
+
+merits:serviceMode a owl:DatatypeProperty ;
+    rdfs:label "service mode" ;
+    rdfs:domain merits:Train ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Type of train service" .
+
+merits:serviceProvider a owl:DatatypeProperty ;
+    rdfs:label "service provider" ;
+    rdfs:domain merits:Train ;
+    rdfs:range xsd:string .
+
+merits:reservationCode a owl:DatatypeProperty ;
+    rdfs:label "reservation code" ;
+    rdfs:range xsd:string .
+
+# Data Properties - Location
+
+merits:arrivalPlatform a owl:DatatypeProperty ;
+    rdfs:label "arrival platform" ;
+    rdfs:domain merits:PointOfRoute ;
+    rdfs:range xsd:string .
+
+merits:departurePlatform a owl:DatatypeProperty ;
+    rdfs:label "departure platform" ;
+    rdfs:domain merits:PointOfRoute ;
+    rdfs:range xsd:string .
+
+merits:locationQualifier a owl:DatatypeProperty ;
+    rdfs:label "location qualifier" ;
+    rdfs:range xsd:string .
+
+# Data Properties - Transfer and Connection
+
+merits:transferTime a owl:DatatypeProperty ;
+    rdfs:label "transfer time" ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Time required for transfer in minutes" .
+
+merits:defaultTransferTime a owl:DatatypeProperty ;
+    rdfs:label "default transfer time" ;
+    rdfs:domain merits:Stop ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Default minimum connection time at this stop in minutes" .
+
+merits:connectionTime a owl:DatatypeProperty ;
+    rdfs:label "connection time" ;
+    rdfs:domain merits:MinimumConnectionTime ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Minimum connection time in minutes" .
+
+merits:walkingTime a owl:DatatypeProperty ;
+    rdfs:label "walking time" ;
+    rdfs:domain merits:Footpath ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Walking time between stops in minutes" .
+
+# Data Properties - Distance
+
+merits:distance a owl:DatatypeProperty ;
+    rdfs:label "distance" ;
+    rdfs:domain merits:PointOfRoute ;
+    rdfs:range xsd:integer ;
+    rdfs:comment "Cumulative distance from origin" .
+
+merits:distanceUnit a owl:DatatypeProperty ;
+    rdfs:label "distance unit" ;
+    rdfs:domain merits:PointOfRoute ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Unit of distance measurement (e.g., KMT for kilometers)" .
+
+# Data Properties - Reference and Function Codes
+
+merits:referenceFunctionCode a owl:DatatypeProperty ;
+    rdfs:label "reference function code" ;
+    rdfs:range xsd:string ;
+    rdfs:comment "EDIFACT reference function code" .
+
+merits:relationTypeCode a owl:DatatypeProperty ;
+    rdfs:label "relation type code" ;
+    rdfs:range xsd:string .
+
+merits:functionCode a owl:DatatypeProperty ;
+    rdfs:label "function code" ;
+    rdfs:range xsd:string .
+
+# Data Properties - Other
+
+merits:originator a owl:DatatypeProperty ;
+    rdfs:label "originator" ;
+    rdfs:domain merits:MessageMetadata ;
+    rdfs:range xsd:string .
+
+merits:operatingDays a owl:DatatypeProperty ;
+    rdfs:label "operating days" ;
+    rdfs:domain merits:Train ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Binary string indicating days of operation (e.g., 1010101 for alternating days)" .
+
+merits:shortName a owl:DatatypeProperty ;
+    rdfs:label "short name" ;
+    rdfs:range xsd:string .
+
+merits:timezone1 a owl:DatatypeProperty ;
+    rdfs:label "timezone 1" ;
+    rdfs:domain merits:Stop ;
+    rdfs:range xsd:string .
+
+merits:timezone2 a owl:DatatypeProperty ;
+    rdfs:label "timezone 2" ;
+    rdfs:domain merits:Stop ;
+    rdfs:range xsd:string .
+
+# Additional Service-related codes (ASD, TRF, SER, PDT, TFF codes)
+# These are kept as simple data properties for flexibility
+
+merits:asdCode a owl:DatatypeProperty ;
+    rdfs:label "ASD code" ;
+    rdfs:comment "Attribute/Service code for train segments" .
+
+merits:trfCode a owl:DatatypeProperty ;
+    rdfs:label "TRF code" ;
+    rdfs:comment "Tariff code" .
+
+merits:serCode a owl:DatatypeProperty ;
+    rdfs:label "SER code" ;
+    rdfs:comment "Service code" .
+
+merits:brandCode a owl:DatatypeProperty ;
+    rdfs:label "brand code" ;
+    rdfs:comment "Train brand/product code" .

@@ -1,0 +1,302 @@
+@prefix : <http://mapping.example.com/> .
+@prefix csvw: <http://www.w3.org/ns/csvw#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix edifact: <http://example.org/edifact/ontology#> .
+@prefix fnml: <http://semweb.mmlab.be/ns/fnml#> .
+@prefix fno: <https://w3id.org/function/ontology#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix merits: <http://example.org/merits/ontology#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix schema: <http://schema.org/> .
+@prefix tsdupd: <http://example.org/merits/tsdupd#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/merits/tsdupd#footpath/1> a merits:Footpath, schema:WalkAction;
+  merits:attributes "21;";
+  merits:duration 8;
+  merits:durationUnit "MIN";
+  merits:footpathOrHierarchy "6";
+  merits:fromStop <http://example.org/merits/tsdupd#stop/1>;
+  merits:relationshipCode "13";
+  merits:serviceBrand1 "53";
+  merits:serviceBrand2 "54";
+  merits:serviceProvider1 "1186";
+  merits:serviceProvider2 "X292";
+  merits:uicCode1 "007300101";
+  merits:uicCode2 "007350001";
+  dc:identifier "1" .
+
+<http://example.org/merits/tsdupd#footpath/2> a merits:Footpath, schema:WalkAction;
+  merits:attributes "";
+  merits:duration ""^^xsd:integer;
+  merits:durationUnit "";
+  merits:footpathOrHierarchy "14";
+  merits:fromStop <http://example.org/merits/tsdupd#stop/1>;
+  merits:relationshipCode "13";
+  merits:serviceBrand1 "";
+  merits:serviceBrand2 "";
+  merits:serviceProvider1 "";
+  merits:serviceProvider2 "";
+  merits:uicCode1 "007300101";
+  merits:uicCode2 "007350001";
+  dc:identifier "2" .
+
+<http://example.org/merits/tsdupd#footpath/3> a merits:Footpath, schema:WalkAction;
+  merits:attributes "";
+  merits:duration 10;
+  merits:durationUnit "MIN";
+  merits:footpathOrHierarchy "6";
+  merits:fromStop <http://example.org/merits/tsdupd#stop/6>;
+  merits:relationshipCode "13";
+  merits:serviceBrand1 "";
+  merits:serviceBrand2 "";
+  merits:serviceProvider1 "";
+  merits:serviceProvider2 "";
+  merits:uicCode1 "008301699";
+  merits:uicCode2 "008301700";
+  dc:identifier "3" .
+
+<http://example.org/merits/tsdupd#footpath/4> a merits:Footpath, schema:WalkAction;
+  merits:attributes "21;";
+  merits:duration 20;
+  merits:durationUnit "MIN";
+  merits:footpathOrHierarchy "6";
+  merits:fromStop <http://example.org/merits/tsdupd#stop/6>;
+  merits:relationshipCode "13";
+  merits:serviceBrand1 "";
+  merits:serviceBrand2 "";
+  merits:serviceProvider1 "";
+  merits:serviceProvider2 "";
+  merits:uicCode1 "008301699";
+  merits:uicCode2 "008301700";
+  dc:identifier "4" .
+
+<http://example.org/merits/tsdupd#mct/1> a merits:MinimumConnectionTime, schema:TransferAction;
+  merits:atStop <http://example.org/merits/tsdupd#stop/1>;
+  merits:connectionTime 8;
+  merits:serviceBrand1 "";
+  merits:serviceBrand2 "54";
+  merits:serviceProvider1 "";
+  merits:serviceProvider2 "";
+  merits:uicCode "007300101";
+  dc:identifier "1" .
+
+<http://example.org/merits/tsdupd#mct/10> a merits:MinimumConnectionTime, schema:TransferAction;
+  merits:atStop <http://example.org/merits/tsdupd#stop/3>;
+  merits:connectionTime 5;
+  merits:serviceBrand1 "";
+  merits:serviceBrand2 "";
+  merits:serviceProvider1 "1251";
+  merits:serviceProvider2 "1251";
+  merits:uicCode "005107840";
+  dc:identifier "10" .
+
+<http://example.org/merits/tsdupd#mct/2> a merits:MinimumConnectionTime, schema:TransferAction;
+  merits:atStop <http://example.org/merits/tsdupd#stop/1>;
+  merits:connectionTime 6;
+  merits:serviceBrand1 "";
+  merits:serviceBrand2 "";
+  merits:serviceProvider1 "";
+  merits:serviceProvider2 "1073";
+  merits:uicCode "007300101";
+  dc:identifier "2" .
+
+<http://example.org/merits/tsdupd#mct/3> a merits:MinimumConnectionTime, schema:TransferAction;
+  merits:atStop <http://example.org/merits/tsdupd#stop/1>;
+  merits:connectionTime 7;
+  merits:serviceBrand1 "53";
+  merits:serviceBrand2 "";
+  merits:serviceProvider1 "";
+  merits:serviceProvider2 "";
+  merits:uicCode "007300101";
+  dc:identifier "3" .
+
+<http://example.org/merits/tsdupd#mct/4> a merits:MinimumConnectionTime, schema:TransferAction;
+  merits:atStop <http://example.org/merits/tsdupd#stop/1>;
+  merits:connectionTime 5;
+  merits:serviceBrand1 "";
+  merits:serviceBrand2 "";
+  merits:serviceProvider1 "1073";
+  merits:serviceProvider2 "";
+  merits:uicCode "007300101";
+  dc:identifier "4" .
+
+<http://example.org/merits/tsdupd#mct/5> a merits:MinimumConnectionTime, schema:TransferAction;
+  merits:atStop <http://example.org/merits/tsdupd#stop/1>;
+  merits:connectionTime 9;
+  merits:serviceBrand1 "68";
+  merits:serviceBrand2 "84";
+  merits:serviceProvider1 "1073";
+  merits:serviceProvider2 "1180";
+  merits:uicCode "007300101";
+  dc:identifier "5" .
+
+<http://example.org/merits/tsdupd#mct/6> a merits:MinimumConnectionTime, schema:TransferAction;
+  merits:atStop <http://example.org/merits/tsdupd#stop/2>;
+  merits:connectionTime 5;
+  merits:serviceBrand1 "";
+  merits:serviceBrand2 "";
+  merits:serviceProvider1 "1151";
+  merits:serviceProvider2 "1151";
+  merits:uicCode "005102443";
+  dc:identifier "6" .
+
+<http://example.org/merits/tsdupd#mct/7> a merits:MinimumConnectionTime, schema:TransferAction;
+  merits:atStop <http://example.org/merits/tsdupd#stop/3>;
+  merits:connectionTime 5;
+  merits:serviceBrand1 "";
+  merits:serviceBrand2 "";
+  merits:serviceProvider1 "1151";
+  merits:serviceProvider2 "1151";
+  merits:uicCode "005107840";
+  dc:identifier "7" .
+
+<http://example.org/merits/tsdupd#mct/8> a merits:MinimumConnectionTime, schema:TransferAction;
+  merits:atStop <http://example.org/merits/tsdupd#stop/3>;
+  merits:connectionTime 5;
+  merits:serviceBrand1 "";
+  merits:serviceBrand2 "";
+  merits:serviceProvider1 "1151";
+  merits:serviceProvider2 "1251";
+  merits:uicCode "005107840";
+  dc:identifier "8" .
+
+<http://example.org/merits/tsdupd#mct/9> a merits:MinimumConnectionTime, schema:TransferAction;
+  merits:atStop <http://example.org/merits/tsdupd#stop/3>;
+  merits:connectionTime 5;
+  merits:serviceBrand1 "";
+  merits:serviceBrand2 "";
+  merits:serviceProvider1 "1251";
+  merits:serviceProvider2 "1151";
+  merits:uicCode "005107840";
+  dc:identifier "9" .
+
+<http://example.org/merits/tsdupd#meta/2022-03-24T112355> a merits:MessageMetadata;
+  merits:originator "0000";
+  merits:validityPeriodEnd ""^^xsd:date;
+  merits:validityPeriodStart "2022-01-01"^^xsd:date;
+  dc:identifier "2022-03-24T112355" .
+
+<http://example.org/merits/tsdupd#stop/1> a merits:Stop, schema:Place, schema:TrainStation;
+  merits:defaultTransferTime 5;
+  merits:functionCode "29";
+  merits:reservationCode "007300101";
+  merits:shortName "Piraeus"@en;
+  merits:timezone1 "EET";
+  merits:timezone2 "2";
+  merits:uicCode "007300101";
+  dc:identifier "1";
+  schema:addressCountry "GR";
+  schema:name "Piraeus? + : * '"@en;
+  schema:validFrom "2021-08-12"^^xsd:date;
+  schema:validThrough "2999-12-31"^^xsd:date;
+  geo:lat "375656N";
+  geo:long "233833E" .
+
+<http://example.org/merits/tsdupd#stop/2> a merits:Stop, schema:Place, schema:TrainStation;
+  merits:defaultTransferTime 4;
+  merits:functionCode "29";
+  merits:reservationCode "5101101";
+  merits:shortName "BIELSK"@en;
+  merits:timezone1 "CET";
+  merits:timezone2 "1";
+  merits:uicCode "005102443";
+  dc:identifier "2";
+  schema:addressCountry "PL";
+  schema:name "BIELSK PODLASKI"@en;
+  schema:validFrom "2022-07-29"^^xsd:date;
+  schema:validThrough "2999-12-31"^^xsd:date;
+  geo:lat "524541N";
+  geo:long "231117E" .
+
+<http://example.org/merits/tsdupd#stop/3> a merits:Stop, schema:Place, schema:TrainStation;
+  merits:defaultTransferTime 2;
+  merits:functionCode "29";
+  merits:reservationCode "005100183";
+  merits:shortName "SUCHA"@en;
+  merits:timezone1 "CET";
+  merits:timezone2 "1";
+  merits:uicCode "005107840";
+  dc:identifier "3";
+  schema:addressCountry "PL";
+  schema:name "SUCHA BESKIDZKA"@en;
+  schema:validFrom "2020-12-03"^^xsd:date;
+  schema:validThrough "2999-12-31"^^xsd:date;
+  geo:lat "494426N";
+  geo:long "193450E" .
+
+<http://example.org/merits/tsdupd#stop/4> a merits:Stop, schema:Place, schema:TrainStation;
+  merits:defaultTransferTime ""^^xsd:integer;
+  merits:functionCode "29";
+  merits:reservationCode "";
+  merits:shortName "MONTCHEVRIER"@en;
+  merits:timezone1 "CET";
+  merits:timezone2 "1";
+  merits:uicCode "008734657";
+  dc:identifier "4";
+  schema:addressCountry "FR";
+  schema:name "MONTCHEVRIER \"LA MESSILLE\""@en;
+  schema:validFrom "2014-05-07"^^xsd:date;
+  schema:validThrough "2999-12-31"^^xsd:date;
+  geo:lat "";
+  geo:long "" .
+
+<http://example.org/merits/tsdupd#stop/5> a merits:Stop, schema:Place, schema:TrainStation;
+  merits:defaultTransferTime 10;
+  merits:functionCode "29";
+  merits:reservationCode "008300000";
+  merits:shortName "MILANO"@en;
+  merits:timezone1 "CET";
+  merits:timezone2 "1";
+  merits:uicCode "008301666";
+  dc:identifier "5";
+  schema:addressCountry "IT";
+  schema:name "MILANO VILLAPIZZONE"@en;
+  schema:validFrom "2002-10-24"^^xsd:date;
+  schema:validThrough "2008-11-12"^^xsd:date;
+  geo:lat "453015N";
+  geo:long "090839E" .
+
+<http://example.org/merits/tsdupd#stop/6> a merits:Stop, schema:Place, schema:TrainStation;
+  merits:defaultTransferTime 10;
+  merits:functionCode "29";
+  merits:reservationCode "";
+  merits:shortName "MILANO"@en;
+  merits:timezone1 "CET";
+  merits:timezone2 "1";
+  merits:uicCode "008301699";
+  dc:identifier "6";
+  schema:addressCountry "IT";
+  schema:name "MILANO CENTRALE (TR. NORD MILA"@en;
+  schema:validFrom "1987-12-31"^^xsd:date;
+  schema:validThrough "2008-12-01"^^xsd:date;
+  geo:lat "";
+  geo:long "" .
+
+<http://example.org/merits/tsdupd#synonym/1> a merits:StationSynonym;
+  merits:forStop <http://example.org/merits/tsdupd#stop/1>;
+  merits:language "";
+  merits:uicCode "007300101";
+  dc:identifier "1";
+  schema:alternateName "Pir_general"@en .
+
+<http://example.org/merits/tsdupd#synonym/2> a merits:StationSynonym;
+  merits:forStop <http://example.org/merits/tsdupd#stop/1>;
+  merits:language "FR";
+  merits:uicCode "007300101";
+  dc:identifier "2";
+  schema:alternateName "Pir_French"@en .
+
+<http://example.org/merits/tsdupd#synonym/3> a merits:StationSynonym;
+  merits:forStop <http://example.org/merits/tsdupd#stop/1>;
+  merits:language "IT";
+  merits:uicCode "007300101";
+  dc:identifier "3";
+  schema:alternateName "Pir_Italian"@en .

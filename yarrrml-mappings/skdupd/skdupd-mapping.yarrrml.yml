@@ -1,0 +1,125 @@
+prefixes:
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  merits: http://example.org/merits/ontology#
+  edifact: http://example.org/edifact/ontology#
+  skdupd: http://example.org/merits/skdupd#
+  schema: http://schema.org/
+  dct: http://purl.org/dc/terms/
+
+mappings:
+  # META Table - Message Header Information
+  # Columns: reference, validity_first_date, validity_last_date, originator
+  meta:
+    sources:
+      - access: examples/SKDUPD_all_fields_META.csv
+        referenceFormulation: csv
+        delimiter: ';'
+    s: skdupd:meta/$(reference)
+    po:
+      - [a, merits:MessageMetadata]
+      - [dct:identifier, $(reference)]
+      - [merits:validityPeriodStart, $(validity_first_date), xsd:date]
+      - [merits:validityPeriodEnd, $(validity_last_date), xsd:date]
+      - [merits:originator, $(originator)]
+
+  # TRAIN Table - Service/Train Information
+  # Columns: train_id, service_number, reservation, tariff, service_mode, service_name,
+  #          service_provider, information_provider, reservation_company, first_day,
+  #          last_day, operation_days, second_service_number
+  train:
+    sources:
+      - access: examples/SKDUPD_all_fields_TRAIN.csv
+        referenceFormulation: csv
+        delimiter: ';'
+    s: skdupd:train/$(train_id)
+    po:
+      - [a, merits:Train]
+      - [a, schema:TrainTrip]
+      - [dct:identifier, $(train_id)]
+      - [merits:serviceNumber, $(service_number)]
+      - p: merits:serviceName
+        o:
+          value: $(service_name)
+          language: en
+      - [merits:serviceMode, $(service_mode)]
+      - [merits:serviceProvider, $(service_provider)]
+      - [merits:reservationCode, $(reservation)]
+      - [merits:tariffCode, $(tariff)]
+      - [merits:informationProvider, $(information_provider)]
+      - [merits:reservationCompany, $(reservation_company)]
+      - [merits:secondServiceNumber, $(second_service_number)]
+      - [merits:operatingDays, $(operation_days)]
+      - [schema:startDate, $(first_day), xsd:date]
+      - [schema:endDate, $(last_day), xsd:date]
+
+  # POR Table - Points of Route (Stops)
+  # Columns: por_id, train_id, stop_number, uic, arrival_time, arrival_time_offset,
+  #          departure_time, departure_time_offset, arrival_platform, departure_platform,
+  #          property, traffic_restriction_code, distance_and_unit, loading_vehicles,
+  #          unloading_vehicles, check_out, check_in
+  por:
+    sources:
+      - access: examples/SKDUPD_all_fields_POR.csv
+        referenceFormulation: csv
+        delimiter: ';'
+    s: skdupd:por/$(por_id)
+    po:
+      - [a, merits:PointOfRoute]
+      - [a, schema:TrainStation]
+      - [dct:identifier, $(por_id)]
+      - [merits:belongsToTrain, skdupd:train/$(train_id)~iri]
+      - [merits:stopNumber, $(stop_number), xsd:integer]
+      - [merits:uicCode, $(uic)]
+      - [merits:arrivalTime, $(arrival_time), xsd:time]
+      - [merits:arrivalOffset, $(arrival_time_offset), xsd:integer]
+      - [merits:departureTime, $(departure_time), xsd:time]
+      - [merits:departureOffset, $(departure_time_offset), xsd:integer]
+      - [merits:arrivalPlatform, $(arrival_platform)]
+      - [merits:departurePlatform, $(departure_platform)]
+      - [merits:property, $(property)]
+      - [merits:trafficRestrictionCode, $(traffic_restriction_code)]
+      - [merits:distanceAndUnit, $(distance_and_unit)]
+      - [merits:loadingVehicles, $(loading_vehicles)]
+      - [merits:unloadingVehicles, $(unloading_vehicles)]
+      - [merits:checkOut, $(check_out)]
+      - [merits:checkIn, $(check_in)]
+
+  # RELATION Table - Connection Information between Trains
+  # Columns: relation_id, por_id, train_id, service, relation, transfer_time, certainty
+  relation:
+    sources:
+      - access: examples/SKDUPD_all_fields_RELATION.csv
+        referenceFormulation: csv
+        delimiter: ';'
+    s: skdupd:relation/$(relation_id)
+    po:
+      - [a, merits:TrainConnection]
+      - [dct:identifier, $(relation_id)]
+      - [merits:atPointOfRoute, skdupd:por/$(por_id)~iri]
+      - [merits:forTrain, skdupd:train/$(train_id)~iri]
+      - [merits:connectedService, $(service)]
+      - [merits:relationValue, $(relation)]
+      - [merits:transferTime, $(transfer_time), xsd:integer]
+      - [merits:transferCertainty, $(certainty)]
+
+  # ODI Table - Origin-Destination Information
+  # Columns: odi_id, train_id, from_stop_number, to_stop_number, tff_or_asd_or_ser,
+  #          reservation, equipment, tariff_or_quantity
+  odi:
+    sources:
+      - access: examples/SKDUPD_all_fields_ODI.csv
+        referenceFormulation: csv
+        delimiter: ';'
+    s: skdupd:odi/$(odi_id)
+    po:
+      - [a, merits:OriginDestinationInfo]
+      - [dct:identifier, $(odi_id)]
+      - [merits:belongsToTrain, skdupd:train/$(train_id)~iri]
+      - [merits:fromStopNumber, $(from_stop_number), xsd:integer]
+      - [merits:toStopNumber, $(to_stop_number), xsd:integer]
+      - [merits:tffOrAsdOrSer, $(tff_or_asd_or_ser)]
+      - [merits:reservationStatus, $(reservation)]
+      - [merits:equipment, $(equipment)]
+      - [merits:tariffOrQuantity, $(tariff_or_quantity)]

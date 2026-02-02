@@ -1,0 +1,128 @@
+prefixes:
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  merits: http://example.org/merits/ontology#
+  edifact: http://example.org/edifact/ontology#
+  tsdupd: http://example.org/merits/tsdupd#
+  schema: http://schema.org/
+  dct: http://purl.org/dc/terms/
+  geo: http://www.w3.org/2003/01/geo/wgs84_pos#
+
+mappings:
+  # META Table - Message Header Information
+  # Columns: reference, validity_first_date, validity_last_date, originator
+  meta:
+    sources:
+      - access: examples/TSDUPD_V3_META.csv
+        referenceFormulation: csv
+        delimiter: ';'
+    s: tsdupd:meta/$(reference)
+    po:
+      - [a, merits:MessageMetadata]
+      - [dct:identifier, $(reference)]
+      - [merits:validityPeriodStart, $(validity_first_date), xsd:date]
+      - [merits:validityPeriodEnd, $(validity_last_date), xsd:date]
+      - [merits:originator, $(originator)]
+
+  # STOP Table - Station/Stop Information
+  # Columns: stop_id, function_code, uic_code, location_name, location_short_name,
+  #          latitude, longitude, valid_from, valid_to, default_transfer_time,
+  #          country, timezone_1, timezone_2, reservation_code
+  stop:
+    sources:
+      - access: examples/TSDUPD_V3_STOP.csv
+        referenceFormulation: csv
+        delimiter: ';'
+    s: tsdupd:stop/$(stop_id)
+    po:
+      - [a, merits:Stop]
+      - [a, schema:TrainStation]
+      - [a, schema:Place]
+      - [dct:identifier, $(stop_id)]
+      - [merits:functionCode, $(function_code)]
+      - [merits:uicCode, $(uic_code)]
+      - p: schema:name
+        o:
+          value: $(location_name)
+          language: en
+      - p: merits:shortName
+        o:
+          value: $(location_short_name)
+          language: en
+      - [geo:lat, $(latitude)]
+      - [geo:long, $(longitude)]
+      - [schema:validFrom, $(valid_from), xsd:date]
+      - [schema:validThrough, $(valid_to), xsd:date]
+      - [merits:defaultTransferTime, $(default_transfer_time), xsd:integer]
+      - [schema:addressCountry, $(country)]
+      - [merits:timezone1, $(timezone_1)]
+      - [merits:timezone2, $(timezone_2)]
+      - [merits:reservationCode, $(reservation_code)]
+
+  # SYNONYM Table - Alternative Names for Stops
+  # Columns: synonym_id, stop_id, uic_code, language, synonym
+  synonym:
+    sources:
+      - access: examples/TSDUPD_V3_SYNONYM.csv
+        referenceFormulation: csv
+        delimiter: ';'
+    s: tsdupd:synonym/$(synonym_id)
+    po:
+      - [a, merits:StationSynonym]
+      - [dct:identifier, $(synonym_id)]
+      - [merits:forStop, tsdupd:stop/$(stop_id)~iri]
+      - [merits:uicCode, $(uic_code)]
+      - [merits:language, $(language)]
+      - p: schema:alternateName
+        o:
+          value: $(synonym)
+          language: en
+
+  # MCT Table - Minimum Connection Time
+  # Columns: mct_id, stop_id, uic_code, service_brand_1, service_brand_2,
+  #          time, service_provider_1, service_provider_2
+  mct:
+    sources:
+      - access: examples/TSDUPD_V3_MCT.csv
+        referenceFormulation: csv
+        delimiter: ';'
+    s: tsdupd:mct/$(mct_id)
+    po:
+      - [a, merits:MinimumConnectionTime]
+      - [a, schema:TransferAction]
+      - [dct:identifier, $(mct_id)]
+      - [merits:atStop, tsdupd:stop/$(stop_id)~iri]
+      - [merits:uicCode, $(uic_code)]
+      - [merits:serviceBrand1, $(service_brand_1)]
+      - [merits:serviceBrand2, $(service_brand_2)]
+      - [merits:connectionTime, $(time), xsd:integer]
+      - [merits:serviceProvider1, $(service_provider_1)]
+      - [merits:serviceProvider2, $(service_provider_2)]
+
+  # FOOTPATH Table - Walking Connections between Stops
+  # Columns: footpath_id, stop_id, uic_code_1, uic_code_2, duration, duration_unit,
+  #          relationship_code_13, footpath_6_or_hierarchy_14, attributes_with_semicolon,
+  #          service_brand_1, service_brand_2, service_provider_1, service_provider_2
+  footpath:
+    sources:
+      - access: examples/TSDUPD_V3_FOOTPATH.csv
+        referenceFormulation: csv
+        delimiter: ';'
+    s: tsdupd:footpath/$(footpath_id)
+    po:
+      - [a, merits:Footpath]
+      - [a, schema:WalkAction]
+      - [dct:identifier, $(footpath_id)]
+      - [merits:fromStop, tsdupd:stop/$(stop_id)~iri]
+      - [merits:uicCode1, $(uic_code_1)]
+      - [merits:uicCode2, $(uic_code_2)]
+      - [merits:duration, $(duration), xsd:integer]
+      - [merits:durationUnit, $(duration_unit)]
+      - [merits:relationshipCode, $(relationship_code_13)]
+      - [merits:footpathOrHierarchy, $(footpath_6_or_hierarchy_14)]
+      - [merits:attributes, $(attributes_with_semicolon)]
+      - [merits:serviceBrand1, $(service_brand_1)]
+      - [merits:serviceBrand2, $(service_brand_2)]
+      - [merits:serviceProvider1, $(service_provider_1)]
+      - [merits:serviceProvider2, $(service_provider_2)]

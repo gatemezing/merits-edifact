@@ -1,0 +1,240 @@
+@prefix : <http://mapping.example.com/> .
+@prefix csvw: <http://www.w3.org/ns/csvw#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix edifact: <http://example.org/edifact/ontology#> .
+@prefix fnml: <http://semweb.mmlab.be/ns/fnml#> .
+@prefix fno: <https://w3id.org/function/ontology#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix merits: <http://example.org/merits/ontology#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix schema: <http://schema.org/> .
+@prefix skdupd: <http://example.org/merits/skdupd#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/merits/skdupd#meta/2022-07-26T112758> a merits:MessageMetadata;
+  merits:originator "0000";
+  merits:validityPeriodEnd "2021-12-12"^^xsd:date;
+  merits:validityPeriodStart "2021-01-01"^^xsd:date;
+  dc:identifier "2022-07-26T112758" .
+
+<http://example.org/merits/skdupd#odi/1> a merits:OriginDestinationInfo;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:equipment "84";
+  merits:fromStopNumber 1;
+  merits:reservationStatus "";
+  merits:tariffOrQuantity "";
+  merits:tffOrAsdOrSer "";
+  merits:toStopNumber 2;
+  dc:identifier "1" .
+
+<http://example.org/merits/skdupd#odi/2> a merits:OriginDestinationInfo;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:equipment "58";
+  merits:fromStopNumber 2;
+  merits:reservationStatus "";
+  merits:tariffOrQuantity "";
+  merits:tffOrAsdOrSer "";
+  merits:toStopNumber 3;
+  dc:identifier "2" .
+
+<http://example.org/merits/skdupd#odi/3> a merits:OriginDestinationInfo;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:equipment "";
+  merits:fromStopNumber 1;
+  merits:reservationStatus "";
+  merits:tariffOrQuantity "";
+  merits:tffOrAsdOrSer "S30";
+  merits:toStopNumber 3;
+  dc:identifier "3" .
+
+<http://example.org/merits/skdupd#odi/4> a merits:OriginDestinationInfo;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:equipment "";
+  merits:fromStopNumber 1;
+  merits:reservationStatus "";
+  merits:tariffOrQuantity "";
+  merits:tffOrAsdOrSer "S46";
+  merits:toStopNumber 3;
+  dc:identifier "4" .
+
+<http://example.org/merits/skdupd#odi/5> a merits:OriginDestinationInfo;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:equipment "";
+  merits:fromStopNumber 1;
+  merits:reservationStatus "";
+  merits:tariffOrQuantity "";
+  merits:tffOrAsdOrSer "S5";
+  merits:toStopNumber 3;
+  dc:identifier "5" .
+
+<http://example.org/merits/skdupd#odi/6> a merits:OriginDestinationInfo;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:equipment "";
+  merits:fromStopNumber 1;
+  merits:reservationStatus "";
+  merits:tariffOrQuantity "";
+  merits:tffOrAsdOrSer "F26";
+  merits:toStopNumber 3;
+  dc:identifier "6" .
+
+<http://example.org/merits/skdupd#odi/7> a merits:OriginDestinationInfo;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:equipment "";
+  merits:fromStopNumber 1;
+  merits:reservationStatus "13";
+  merits:tariffOrQuantity "2";
+  merits:tffOrAsdOrSer "F4";
+  merits:toStopNumber 3;
+  dc:identifier "7" .
+
+<http://example.org/merits/skdupd#odi/8> a merits:OriginDestinationInfo;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:equipment "";
+  merits:fromStopNumber 1;
+  merits:reservationStatus "12";
+  merits:tariffOrQuantity "1";
+  merits:tffOrAsdOrSer "F5";
+  merits:toStopNumber 3;
+  dc:identifier "8" .
+
+<http://example.org/merits/skdupd#por/1> a merits:PointOfRoute, schema:TrainStation;
+  merits:arrivalOffset ""^^xsd:integer;
+  merits:arrivalPlatform "";
+  merits:arrivalTime ""^^xsd:time;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:checkIn "";
+  merits:checkOut "0453";
+  merits:departureOffset ""^^xsd:integer;
+  merits:departurePlatform "1";
+  merits:departureTime "0503"^^xsd:time;
+  merits:distanceAndUnit "";
+  merits:loadingVehicles "ASD+7";
+  merits:property "5";
+  merits:stopNumber 1;
+  merits:trafficRestrictionCode "1";
+  merits:uicCode "006070001";
+  merits:unloadingVehicles "";
+  dc:identifier "1" .
+
+<http://example.org/merits/skdupd#por/2> a merits:PointOfRoute, schema:TrainStation;
+  merits:arrivalOffset 1;
+  merits:arrivalPlatform "3";
+  merits:arrivalTime "0445"^^xsd:time;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:checkIn "0505";
+  merits:checkOut "0330";
+  merits:departureOffset 1;
+  merits:departurePlatform "3";
+  merits:departureTime "0400"^^xsd:time;
+  merits:distanceAndUnit "190:KMT";
+  merits:loadingVehicles "";
+  merits:property "17";
+  merits:stopNumber 2;
+  merits:trafficRestrictionCode "4";
+  merits:uicCode "006070013";
+  merits:unloadingVehicles "ASD+9";
+  dc:identifier "2" .
+
+<http://example.org/merits/skdupd#por/3> a merits:PointOfRoute, schema:TrainStation;
+  merits:arrivalOffset ""^^xsd:integer;
+  merits:arrivalPlatform "";
+  merits:arrivalTime "0500"^^xsd:time;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:checkIn "0540";
+  merits:checkOut "";
+  merits:departureOffset ""^^xsd:integer;
+  merits:departurePlatform "";
+  merits:departureTime ""^^xsd:time;
+  merits:distanceAndUnit "200:KMT";
+  merits:loadingVehicles "";
+  merits:property "";
+  merits:stopNumber 3;
+  merits:trafficRestrictionCode "";
+  merits:uicCode "006070016";
+  merits:unloadingVehicles "";
+  dc:identifier "3" .
+
+<http://example.org/merits/skdupd#por/4> a merits:PointOfRoute, schema:TrainStation;
+  merits:arrivalOffset 1;
+  merits:arrivalPlatform "";
+  merits:arrivalTime "2347"^^xsd:time;
+  merits:belongsToTrain <http://example.org/merits/skdupd#train/1>;
+  merits:checkIn "";
+  merits:checkOut "";
+  merits:departureOffset 1;
+  merits:departurePlatform "";
+  merits:departureTime "0017"^^xsd:time;
+  merits:distanceAndUnit "";
+  merits:loadingVehicles "";
+  merits:property "";
+  merits:stopNumber 4;
+  merits:trafficRestrictionCode "";
+  merits:uicCode "005514449";
+  merits:unloadingVehicles "";
+  dc:identifier "4" .
+
+<http://example.org/merits/skdupd#relation/1> a merits:TrainConnection;
+  merits:atPointOfRoute <http://example.org/merits/skdupd#por/2>;
+  merits:connectedService "02";
+  merits:forTrain <http://example.org/merits/skdupd#train/1>;
+  merits:relationValue "8";
+  merits:transferCertainty "";
+  merits:transferTime ""^^xsd:integer;
+  dc:identifier "1" .
+
+<http://example.org/merits/skdupd#relation/2> a merits:TrainConnection;
+  merits:atPointOfRoute <http://example.org/merits/skdupd#por/2>;
+  merits:connectedService "03";
+  merits:forTrain <http://example.org/merits/skdupd#train/1>;
+  merits:relationValue "11";
+  merits:transferCertainty "";
+  merits:transferTime ""^^xsd:integer;
+  dc:identifier "2" .
+
+<http://example.org/merits/skdupd#relation/3> a merits:TrainConnection;
+  merits:atPointOfRoute <http://example.org/merits/skdupd#por/2>;
+  merits:connectedService "45";
+  merits:forTrain <http://example.org/merits/skdupd#train/1>;
+  merits:relationValue "7";
+  merits:transferCertainty "1";
+  merits:transferTime 10;
+  dc:identifier "3" .
+
+<http://example.org/merits/skdupd#relation/4> a merits:TrainConnection;
+  merits:atPointOfRoute <http://example.org/merits/skdupd#por/2>;
+  merits:connectedService "60";
+  merits:forTrain <http://example.org/merits/skdupd#train/1>;
+  merits:relationValue "7";
+  merits:transferCertainty "X02";
+  merits:transferTime 30;
+  dc:identifier "4" .
+
+<http://example.org/merits/skdupd#relation/5> a merits:TrainConnection;
+  merits:atPointOfRoute <http://example.org/merits/skdupd#por/2>;
+  merits:connectedService "75";
+  merits:forTrain <http://example.org/merits/skdupd#train/1>;
+  merits:relationValue "7";
+  merits:transferCertainty "X04";
+  merits:transferTime ""^^xsd:integer;
+  dc:identifier "5" .
+
+<http://example.org/merits/skdupd#train/1> a merits:Train, schema:TrainTrip;
+  merits:informationProvider "";
+  merits:operatingDays "101111";
+  merits:reservationCode "11";
+  merits:reservationCompany "80";
+  merits:secondServiceNumber "33";
+  merits:serviceMode "3";
+  merits:serviceName "ALPHA TANGO"@en;
+  merits:serviceNumber "3";
+  merits:serviceProvider "0060";
+  merits:tariffCode "1";
+  dc:identifier "1";
+  schema:endDate "2021-08-28"^^xsd:date;
+  schema:startDate "2021-08-23"^^xsd:date .
