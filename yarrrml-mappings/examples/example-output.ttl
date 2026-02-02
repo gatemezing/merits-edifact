@@ -1,11 +1,12 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix merits: <http://example.org/merits/ontology#> .
+@prefix era: <http://example.org/merits/ontology#> .
 @prefix skdupd: <http://example.org/merits/skdupd#> .
 @prefix tsdupd: <http://example.org/merits/tsdupd#> .
 @prefix schema: <http://schema.org/> .
 @prefix dct: <http://purl.org/dc/terms/> .
+@prefix era: <http://data.europa.eu/949/> .
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 
 # ============================================================================
@@ -13,205 +14,205 @@
 # ============================================================================
 
 # Message Metadata
-skdupd:meta/2022-07-26T112758 a merits:MessageMetadata ;
+skdupd:meta/2022-07-26T112758 a era:MessageMetadata ;
     dct:identifier "2022-07-26T112758" ;
-    merits:validityPeriodStart "2021-01-01"^^xsd:date ;
-    merits:validityPeriodEnd "2021-12-12"^^xsd:date ;
-    merits:originator "0000" ;
+    era:validityPeriodStart "2021-01-01"^^xsd:date ;
+    era:validityPeriodEnd "2021-12-12"^^xsd:date ;
+    era:originator "0000" ;
     dct:created "2022-07-26T112758"^^xsd:dateTime .
 
 # Train Service
 skdupd:train/1 a era:Train, schema:TrainTrip ;
     dct:identifier "1" ;
-    merits:serviceNumber "3" ;
-    merits:serviceName "ALPHA TANGO"@en ;
-    merits:serviceMode "3" ;
-    merits:serviceProvider "0060" ;
-    merits:reservationCode "11" ;
-    merits:tariffCode "1" ;
-    merits:reservationCompany "80" ;
-    merits:secondServiceNumber "33" ;
-    merits:periodQualifier "273" ;
-    merits:operatingDays "101111" ;
+    era:serviceNumber "3" ;
+    era:serviceName "ALPHA TANGO"@en ;
+    era:serviceMode "3" ;
+    era:serviceProvider "0060" ;
+    era:reservationCode "11" ;
+    era:tariffCode "1" ;
+    era:reservationCompany "80" ;
+    era:secondServiceNumber "33" ;
+    era:periodQualifier "273" ;
+    era:operatingDays "101111" ;
     schema:startDate "2021-08-23"^^xsd:date ;
     schema:endDate "2021-08-28"^^xsd:date .
 
 # Point of Route 1 - Departure Station
-skdupd:por/1 a merits:PointOfRoute, schema:TrainStation ;
+skdupd:por/1 a era:PointOfRoute, schema:TrainStation ;
     dct:identifier "1" ;
-    merits:belongsToTrain skdupd:train/1 ;
-    merits:uicCode "006070001" ;
-    merits:departureTime "05:03:00"^^xsd:time ;
-    merits:departurePlatform "1" ;
-    merits:locationQualifier "5" ;
-    merits:asdCode01 "7" ;
-    merits:asdCode02 "44" ;
-    merits:asdLastTime02 "04:53:00"^^xsd:time ;
-    merits:trfCode01 "1" .
+    era:belongsToTrain skdupd:train/1 ;
+    era:uicCode "006070001" ;
+    era:departureTime "05:03:00"^^xsd:time ;
+    era:departurePlatform "1" ;
+    era:locationQualifier "5" ;
+    era:asdCode01 "7" ;
+    era:asdCode02 "44" ;
+    era:asdLastTime02 "04:53:00"^^xsd:time ;
+    era:trfCode01 "1" .
 
 # Point of Route 2 - Intermediate Station with Connection Info
-skdupd:por/2 a merits:PointOfRoute, schema:TrainStation ;
+skdupd:por/2 a era:PointOfRoute, schema:TrainStation ;
     dct:identifier "2" ;
-    merits:belongsToTrain skdupd:train/1 ;
-    merits:uicCode "006070013" ;
-    merits:arrivalTime "04:45:00"^^xsd:time ;
-    merits:arrivalOffset "1"^^xsd:integer ;
-    merits:departureTime "04:00:00"^^xsd:time ;
-    merits:departureOffset "1"^^xsd:integer ;
-    merits:arrivalPlatform "3" ;
-    merits:departurePlatform "3" ;
-    merits:locationQualifier "17" ;
-    merits:distance "190"^^xsd:integer ;
-    merits:distanceUnit "KMT" ;
-    merits:asdCode01 "9" ;
-    merits:asdCode02 "44" ;
-    merits:asdLastTime02 "03:30:00"^^xsd:time ;
-    merits:asdCode03 "45" ;
-    merits:asdFirstTime03 "05:05:00"^^xsd:time ;
-    merits:trfCode01 "4" .
+    era:belongsToTrain skdupd:train/1 ;
+    era:uicCode "006070013" ;
+    era:arrivalTime "04:45:00"^^xsd:time ;
+    era:arrivalOffset "1"^^xsd:integer ;
+    era:departureTime "04:00:00"^^xsd:time ;
+    era:departureOffset "1"^^xsd:integer ;
+    era:arrivalPlatform "3" ;
+    era:departurePlatform "3" ;
+    era:locationQualifier "17" ;
+    era:distance "190"^^xsd:integer ;
+    era:distanceUnit "KMT" ;
+    era:asdCode01 "9" ;
+    era:asdCode02 "44" ;
+    era:asdLastTime02 "03:30:00"^^xsd:time ;
+    era:asdCode03 "45" ;
+    era:asdFirstTime03 "05:05:00"^^xsd:time ;
+    era:trfCode01 "4" .
 
 # Point of Route 3 - Arrival Station
-skdupd:por/3 a merits:PointOfRoute, schema:TrainStation ;
+skdupd:por/3 a era:PointOfRoute, schema:TrainStation ;
     dct:identifier "3" ;
-    merits:belongsToTrain skdupd:train/1 ;
-    merits:uicCode "006070016" ;
-    merits:arrivalTime "05:00:00"^^xsd:time ;
-    merits:distance "200"^^xsd:integer ;
-    merits:distanceUnit "KMT" ;
-    merits:asdCode01 "45" ;
-    merits:asdFirstTime01 "05:40:00"^^xsd:time .
+    era:belongsToTrain skdupd:train/1 ;
+    era:uicCode "006070016" ;
+    era:arrivalTime "05:00:00"^^xsd:time ;
+    era:distance "200"^^xsd:integer ;
+    era:distanceUnit "KMT" ;
+    era:asdCode01 "45" ;
+    era:asdFirstTime01 "05:40:00"^^xsd:time .
 
 # Train Connection at Station 2
 skdupd:relation/1 a era:TrainConnection, schema:TrainConnection ;
     dct:identifier "1" ;
-    merits:atPointOfRoute skdupd:por/2 ;
-    merits:referenceFunctionCode "AUE" ;
-    merits:connectedServiceNumber "02" ;
-    merits:relationTypeCode "13" ;
-    merits:relationValue "8" .
+    era:atPointOfRoute skdupd:por/2 ;
+    era:referenceFunctionCode "AUE" ;
+    era:connectedServiceNumber "02" ;
+    era:relationTypeCode "13" ;
+    era:relationValue "8" .
 
 skdupd:relation/2 a era:TrainConnection, schema:TrainConnection ;
     dct:identifier "2" ;
-    merits:atPointOfRoute skdupd:por/2 ;
-    merits:referenceFunctionCode "AUE" ;
-    merits:connectedServiceNumber "45" ;
-    merits:relationTypeCode "13" ;
-    merits:relationValue "7" ;
-    merits:transferTime "10"^^xsd:integer ;
-    merits:transferCertainty "1" .
+    era:atPointOfRoute skdupd:por/2 ;
+    era:referenceFunctionCode "AUE" ;
+    era:connectedServiceNumber "45" ;
+    era:relationTypeCode "13" ;
+    era:relationValue "7" ;
+    era:transferTime "10"^^xsd:integer ;
+    era:transferCertainty "1" .
 
 # Origin-Destination Information
-skdupd:odi/1 a merits:OriginDestinationInfo ;
+skdupd:odi/1 a era:OriginDestinationInfo ;
     dct:identifier "1" ;
-    merits:belongsToTrain skdupd:train/1 ;
-    merits:fromStop "006070001" ;
-    merits:toStop "006070013" ;
-    merits:fromStopNumber "1"^^xsd:integer ;
-    merits:toStopNumber "2"^^xsd:integer ;
-    merits:brandCode "84" .
+    era:belongsToTrain skdupd:train/1 ;
+    era:fromStop "006070001" ;
+    era:toStop "006070013" ;
+    era:fromStopNumber "1"^^xsd:integer ;
+    era:toStopNumber "2"^^xsd:integer ;
+    era:brandCode "84" .
 
-skdupd:odi/2 a merits:OriginDestinationInfo ;
+skdupd:odi/2 a era:OriginDestinationInfo ;
     dct:identifier "2" ;
-    merits:belongsToTrain skdupd:train/1 ;
-    merits:fromStop "006070013" ;
-    merits:toStop "006070016" ;
-    merits:fromStopNumber "2"^^xsd:integer ;
-    merits:toStopNumber "3"^^xsd:integer ;
-    merits:brandCode "58" .
+    era:belongsToTrain skdupd:train/1 ;
+    era:fromStop "006070013" ;
+    era:toStop "006070016" ;
+    era:fromStopNumber "2"^^xsd:integer ;
+    era:toStopNumber "3"^^xsd:integer ;
+    era:brandCode "58" .
 
 # ============================================================================
 # Example RDF Output from TSDUPD (Location Data)
 # ============================================================================
 
 # Message Metadata
-tsdupd:meta/2022-03-24T112355 a merits:MessageMetadata ;
+tsdupd:meta/2022-03-24T112355 a era:MessageMetadata ;
     dct:identifier "2022-03-24T112355" ;
-    merits:validityPeriodStart "2022-01-01"^^xsd:date ;
-    merits:validityPeriodEnd "2999-12-31"^^xsd:date ;
-    merits:originator "0000" ;
+    era:validityPeriodStart "2022-01-01"^^xsd:date ;
+    era:validityPeriodEnd "2999-12-31"^^xsd:date ;
+    era:originator "0000" ;
     dct:created "2022-03-24T112355"^^xsd:dateTime .
 
 # Stop Information - Piraeus, Greece
-tsdupd:stop/1 a merits:Stop, schema:TrainStation, schema:Place ;
+tsdupd:stop/1 a era:Stop, schema:TrainStation, schema:Place ;
     dct:identifier "1" ;
-    merits:functionCode "29" ;
-    merits:uicCode "007300101" ;
+    era:functionCode "29" ;
+    era:uicCode "007300101" ;
     era:opName "Piraeus"@en ;
-    merits:shortName "Piraeus"@en ;
+    era:shortName "Piraeus"@en ;
     geo:lat "375656N" ;
     geo:long "233833E" ;
     schema:validFrom "2021-08-12"^^xsd:date ;
     schema:validThrough "2999-12-31"^^xsd:date ;
-    merits:defaultTransferTime "5"^^xsd:integer ;
+    era:defaultTransferTime "5"^^xsd:integer ;
     schema:addressCountry "GR" ;
-    merits:timezone1 "EET" ;
-    merits:timezone2 "2" ;
-    merits:reservationCode "007300101" .
+    era:timezone1 "EET" ;
+    era:timezone2 "2" ;
+    era:reservationCode "007300101" .
 
 # Stop Information - Milano Villapizzone, Italy
-tsdupd:stop/2 a merits:Stop, schema:TrainStation, schema:Place ;
+tsdupd:stop/2 a era:Stop, schema:TrainStation, schema:Place ;
     dct:identifier "2" ;
-    merits:functionCode "29" ;
-    merits:uicCode "008301666" ;
+    era:functionCode "29" ;
+    era:uicCode "008301666" ;
     era:opName "MILANO VILLAPIZZONE"@en ;
     geo:lat "453015N" ;
     geo:long "090839E" ;
     schema:validFrom "2002-10-24"^^xsd:date ;
     schema:validThrough "2008-11-12"^^xsd:date ;
-    merits:defaultTransferTime "10"^^xsd:integer ;
+    era:defaultTransferTime "10"^^xsd:integer ;
     schema:addressCountry "IT" ;
-    merits:timezone1 "CET" ;
-    merits:timezone2 "1" .
+    era:timezone1 "CET" ;
+    era:timezone2 "1" .
 
 # Stop Information - Milano Centrale
-tsdupd:stop/3 a merits:Stop, schema:TrainStation, schema:Place ;
+tsdupd:stop/3 a era:Stop, schema:TrainStation, schema:Place ;
     dct:identifier "3" ;
-    merits:functionCode "29" ;
-    merits:uicCode "008301699" ;
+    era:functionCode "29" ;
+    era:uicCode "008301699" ;
     era:opName "MILANO CENTRALE (TR. NORD MILA"@en ;
     schema:validFrom "1987-12-31"^^xsd:date ;
     schema:validThrough "2008-12-01"^^xsd:date ;
-    merits:defaultTransferTime "10"^^xsd:integer ;
+    era:defaultTransferTime "10"^^xsd:integer ;
     schema:addressCountry "IT" ;
-    merits:timezone1 "CET" ;
-    merits:timezone2 "1" .
+    era:timezone1 "CET" ;
+    era:timezone2 "1" .
 
 # Synonym for Milano Centrale
-tsdupd:synonym/1 a merits:StationSynonym ;
+tsdupd:synonym/1 a era:StationSynonym ;
     dct:identifier "1" ;
-    merits:forStop tsdupd:stop/3 ;
-    merits:referenceFunctionCode "AWN" ;
-    merits:synonymUicCode "008301700" ;
+    era:forStop tsdupd:stop/3 ;
+    era:referenceFunctionCode "AWN" ;
+    era:synonymUicCode "008301700" ;
     schema:alternateName "Milano Centrale Nord"@en .
 
 # Minimum Connection Time
-tsdupd:mct/1 a merits:MinimumConnectionTime, schema:TransferAction ;
+tsdupd:mct/1 a era:MinimumConnectionTime, schema:TransferAction ;
     dct:identifier "1" ;
-    merits:atStop tsdupd:stop/3 ;
-    merits:referenceFunctionCode "AWN" ;
-    merits:arrivalServiceNumber "008301700" ;
-    merits:connectionTime "10"^^xsd:integer ;
-    merits:relationTypeCode "13" ;
-    merits:relationValue "6" .
+    era:atStop tsdupd:stop/3 ;
+    era:referenceFunctionCode "AWN" ;
+    era:arrivalServiceNumber "008301700" ;
+    era:connectionTime "10"^^xsd:integer ;
+    era:relationTypeCode "13" ;
+    era:relationValue "6" .
 
-tsdupd:mct/2 a merits:MinimumConnectionTime, schema:TransferAction ;
+tsdupd:mct/2 a era:MinimumConnectionTime, schema:TransferAction ;
     dct:identifier "2" ;
-    merits:atStop tsdupd:stop/3 ;
-    merits:referenceFunctionCode "AWN" ;
-    merits:arrivalServiceNumber "008301700" ;
-    merits:connectionTime "20"^^xsd:integer ;
-    merits:relationTypeCode "13" ;
-    merits:relationValue "6" .
+    era:atStop tsdupd:stop/3 ;
+    era:referenceFunctionCode "AWN" ;
+    era:arrivalServiceNumber "008301700" ;
+    era:connectionTime "20"^^xsd:integer ;
+    era:relationTypeCode "13" ;
+    era:relationValue "6" .
 
 # Footpath Connection
-tsdupd:footpath/1 a merits:Footpath, schema:WalkAction ;
+tsdupd:footpath/1 a era:Footpath, schema:WalkAction ;
     dct:identifier "1" ;
-    merits:fromStop tsdupd:stop/1 ;
-    merits:referenceFunctionCode "AWN" ;
-    merits:toStopUicCode "007350001" ;
-    merits:walkingTime "8"^^xsd:integer ;
-    merits:relationTypeCode "13" ;
-    merits:relationValue "6" .
+    era:fromStop tsdupd:stop/1 ;
+    era:referenceFunctionCode "AWN" ;
+    era:toStopUicCode "007350001" ;
+    era:walkingTime "8"^^xsd:integer ;
+    era:relationTypeCode "13" ;
+    era:relationValue "6" .
 
 # ============================================================================
 # Example SPARQL Queries
@@ -221,17 +222,17 @@ tsdupd:footpath/1 a merits:Footpath, schema:WalkAction ;
 # SELECT ?trainName ?stopUIC ?arrival ?departure
 # WHERE {
 #   ?train a era:Train ;
-#          merits:serviceName ?trainName .
-#   ?por merits:belongsToTrain ?train ;
-#        merits:uicCode ?stopUIC .
-#   OPTIONAL { ?por merits:arrivalTime ?arrival }
-#   OPTIONAL { ?por merits:departureTime ?departure }
+#          era:serviceName ?trainName .
+#   ?por era:belongsToTrain ?train ;
+#        era:uicCode ?stopUIC .
+#   OPTIONAL { ?por era:arrivalTime ?arrival }
+#   OPTIONAL { ?por era:departureTime ?departure }
 # }
 
 # Query 2: Find stations in Italy with their coordinates
 # SELECT ?name ?lat ?long
 # WHERE {
-#   ?stop a merits:Stop ;
+#   ?stop a era:Stop ;
 #         era:opName ?name ;
 #         schema:addressCountry "IT" ;
 #         geo:lat ?lat ;
@@ -242,7 +243,7 @@ tsdupd:footpath/1 a merits:Footpath, schema:WalkAction ;
 # SELECT ?fromStopName ?toStopUIC ?walkTime
 # WHERE {
 #   ?stop era:opName ?fromStopName .
-#   ?footpath merits:fromStop ?stop ;
-#             merits:toStopUicCode ?toStopUIC ;
-#             merits:walkingTime ?walkTime .
+#   ?footpath era:fromStop ?stop ;
+#             era:toStopUicCode ?toStopUIC ;
+#             era:walkingTime ?walkTime .
 # }
