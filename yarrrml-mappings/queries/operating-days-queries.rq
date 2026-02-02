@@ -1,0 +1,215 @@
+# ============================================================================
+# SPARQL Queries for Semantic Operating Days
+# ============================================================================
+#
+# These queries demonstrate how to work with the semantic operating days
+# representation using W3C Time Ontology and convert between binary and
+# semantic formats.
+#
+# Binary format: "1010101" (position: 1=Mon, 2=Tue, ..., 7=Sun)
+# Semantic format: era:operatesOnDay time:Monday, time:Wednesday, ...
+# ============================================================================
+
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX merits: <http://example.org/merits/ontology#>
+PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX schema: <http://schema.org/>
+PREFIX dc: <http://purl.org/dc/terms/>
+
+# ----------------------------------------------------------------------------
+# Query 1: Find all trains operating on Monday
+# ----------------------------------------------------------------------------
+# SELECT ?train ?serviceName
+# WHERE {
+#     ?train a era:Train ;
+#            era:serviceName ?serviceName ;
+#            era:operatesOnDay time:Monday .
+# }
+
+# ----------------------------------------------------------------------------
+# Query 2: List all operating days for a train (semantic to readable)
+# ----------------------------------------------------------------------------
+# SELECT ?train ?serviceName (GROUP_CONCAT(?dayName; separator=", ") AS ?operatingDays)
+# WHERE {
+#     ?train a era:Train ;
+#            era:serviceName ?serviceName ;
+#            era:operatesOnDay ?day .
+#
+#     VALUES (?day ?dayName) {
+#         (time:Monday "Monday")
+#         (time:Tuesday "Tuesday")
+#         (time:Wednesday "Wednesday")
+#         (time:Thursday "Thursday")
+#         (time:Friday "Friday")
+#         (time:Saturday "Saturday")
+#         (time:Sunday "Sunday")
+#     }
+# }
+# GROUP BY ?train ?serviceName
+
+# ----------------------------------------------------------------------------
+# Query 3: CONSTRUCT binary string "1010101" from semantic days
+# ----------------------------------------------------------------------------
+# Reconstructs the legacy binary format from semantic era:operatesOnDay data
+SELECT ?train ?serviceName
+       (CONCAT(
+           IF(BOUND(?mon), "1", "0"),
+           IF(BOUND(?tue), "1", "0"),
+           IF(BOUND(?wed), "1", "0"),
+           IF(BOUND(?thu), "1", "0"),
+           IF(BOUND(?fri), "1", "0"),
+           IF(BOUND(?sat), "1", "0"),
+           IF(BOUND(?sun), "1", "0")
+       ) AS ?binaryString)
+WHERE {
+    ?train a era:Train ;
+           era:serviceName ?serviceName .
+
+    OPTIONAL { ?train era:operatesOnDay time:Monday . BIND(time:Monday AS ?mon) }
+    OPTIONAL { ?train era:operatesOnDay time:Tuesday . BIND(time:Tuesday AS ?tue) }
+    OPTIONAL { ?train era:operatesOnDay time:Wednesday . BIND(time:Wednesday AS ?wed) }
+    OPTIONAL { ?train era:operatesOnDay time:Thursday . BIND(time:Thursday AS ?thu) }
+    OPTIONAL { ?train era:operatesOnDay time:Friday . BIND(time:Friday AS ?fri) }
+    OPTIONAL { ?train era:operatesOnDay time:Saturday . BIND(time:Saturday AS ?sat) }
+    OPTIONAL { ?train era:operatesOnDay time:Sunday . BIND(time:Sunday AS ?sun) }
+}
+
+# ----------------------------------------------------------------------------
+# Query 4: CONSTRUCT to add binary operatingDays from semantic data
+# ----------------------------------------------------------------------------
+# Use this to generate the legacy property from semantic representation
+# CONSTRUCT {
+#     ?train era:operatingDays ?binaryString .
+# }
+# WHERE {
+#     ?train a era:Train .
+#
+#     OPTIONAL { ?train era:operatesOnDay time:Monday . BIND("1" AS ?d1) }
+#     OPTIONAL { ?train era:operatesOnDay time:Tuesday . BIND("1" AS ?d2) }
+#     OPTIONAL { ?train era:operatesOnDay time:Wednesday . BIND("1" AS ?d3) }
+#     OPTIONAL { ?train era:operatesOnDay time:Thursday . BIND("1" AS ?d4) }
+#     OPTIONAL { ?train era:operatesOnDay time:Friday . BIND("1" AS ?d5) }
+#     OPTIONAL { ?train era:operatesOnDay time:Saturday . BIND("1" AS ?d6) }
+#     OPTIONAL { ?train era:operatesOnDay time:Sunday . BIND("1" AS ?d7) }
+#
+#     BIND(CONCAT(
+#         COALESCE(?d1, "0"),
+#         COALESCE(?d2, "0"),
+#         COALESCE(?d3, "0"),
+#         COALESCE(?d4, "0"),
+#         COALESCE(?d5, "0"),
+#         COALESCE(?d6, "0"),
+#         COALESCE(?d7, "0")
+#     ) AS ?binaryString)
+#
+#     FILTER(BOUND(?binaryString))
+# }
+
+# ----------------------------------------------------------------------------
+# Query 5: Convert binary string TO semantic days (INSERT/UPDATE)
+# ----------------------------------------------------------------------------
+# Parse "1010101" and create era:operatesOnDay triples
+# Note: Requires SPARQL UPDATE endpoint
+# INSERT {
+#     ?train era:operatesOnDay ?day .
+# }
+# WHERE {
+#     ?train a era:Train ;
+#            era:operatingDays ?binary .
+#
+#     VALUES (?pos ?day) {
+#         (1 time:Monday)
+#         (2 time:Tuesday)
+#         (3 time:Wednesday)
+#         (4 time:Thursday)
+#         (5 time:Friday)
+#         (6 time:Saturday)
+#         (7 time:Sunday)
+#     }
+#
+#     FILTER(SUBSTR(?binary, ?pos, 1) = "1")
+# }
+
+# ----------------------------------------------------------------------------
+# Query 6: Full comparison - show both formats side by side
+# ----------------------------------------------------------------------------
+# SELECT ?train ?serviceName ?legacyBinary ?semanticDays
+# WHERE {
+#     ?train a era:Train ;
+#            era:serviceName ?serviceName .
+#
+#     OPTIONAL { ?train era:operatingDays ?legacyBinary }
+#
+#     {
+#         SELECT ?train (GROUP_CONCAT(?dayLabel; separator=",") AS ?semanticDays)
+#         WHERE {
+#             ?train era:operatesOnDay ?day .
+#             VALUES (?day ?dayLabel) {
+#                 (time:Monday "Mon")
+#                 (time:Tuesday "Tue")
+#                 (time:Wednesday "Wed")
+#                 (time:Thursday "Thu")
+#                 (time:Friday "Fri")
+#                 (time:Saturday "Sat")
+#                 (time:Sunday "Sun")
+#             }
+#         }
+#         GROUP BY ?train
+#     }
+# }
+
+# ----------------------------------------------------------------------------
+# Query 7: Find weekday-only trains (Mon-Fri)
+# ----------------------------------------------------------------------------
+# SELECT ?train ?serviceName
+# WHERE {
+#     ?train a era:Train ;
+#            era:serviceName ?serviceName ;
+#            era:operatesOnDay time:Monday ;
+#            era:operatesOnDay time:Tuesday ;
+#            era:operatesOnDay time:Wednesday ;
+#            era:operatesOnDay time:Thursday ;
+#            era:operatesOnDay time:Friday .
+#
+#     FILTER NOT EXISTS { ?train era:operatesOnDay time:Saturday }
+#     FILTER NOT EXISTS { ?train era:operatesOnDay time:Sunday }
+# }
+
+# ----------------------------------------------------------------------------
+# Query 8: Find weekend trains
+# ----------------------------------------------------------------------------
+# SELECT ?train ?serviceName
+# WHERE {
+#     ?train a era:Train ;
+#            era:serviceName ?serviceName .
+#
+#     { ?train era:operatesOnDay time:Saturday }
+#     UNION
+#     { ?train era:operatesOnDay time:Sunday }
+# }
+
+# ----------------------------------------------------------------------------
+# Query 9: Count trains by number of operating days
+# ----------------------------------------------------------------------------
+# SELECT ?train ?serviceName (COUNT(?day) AS ?numDays)
+# WHERE {
+#     ?train a era:Train ;
+#            era:serviceName ?serviceName ;
+#            era:operatesOnDay ?day .
+# }
+# GROUP BY ?train ?serviceName
+# ORDER BY DESC(?numDays)
+
+# ----------------------------------------------------------------------------
+# Query 10: Trains with exception dates (special non-operating days)
+# ----------------------------------------------------------------------------
+# SELECT ?train ?serviceName ?exceptionDate
+# WHERE {
+#     ?train a era:Train ;
+#            era:serviceName ?serviceName ;
+#            era:hasOperatingSchedule ?schedule .
+#
+#     ?schedule era:exceptionDate ?exceptionDate .
+# }
+# ORDER BY ?train ?exceptionDate

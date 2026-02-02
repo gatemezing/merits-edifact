@@ -1,0 +1,930 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix merits: <http://example.org/merits/ontology#> .
+@prefix schema: <http://schema.org/> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix gtfs: <http://vocab.gtfs.org/terms#> .
+@prefix shapes: <http://example.org/merits/shapes#> .
+
+# ============================================================================
+# SHACL Shapes for MERITS EDIFACT RDF Data Validation
+# ============================================================================
+#
+# This shapes graph validates RDF data produced from MERITS EDIFACT messages
+# (SKDUPD for timetables, TSDUPD for locations).
+#
+# Ontology references:
+#   - W3C Time Ontology: https://www.w3.org/TR/owl-time/
+#   - Schema.org: https://schema.org/
+#   - GTFS Vocabulary: http://vocab.gtfs.org/terms
+# ============================================================================
+
+
+
+# ----------------------------------------------------------------------------
+# MessageMetadata Shape
+# ----------------------------------------------------------------------------
+shapes:MessageMetadataShape a sh:NodeShape ;
+    sh:targetClass merits:MessageMetadata ;
+    sh:name "Message Metadata Shape" ;
+    sh:description "Validates metadata about EDIFACT messages" ;
+
+    sh:property [
+        sh:path dc:identifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "identifier" ;
+        sh:message "MessageMetadata must have exactly one dc:identifier of type string"
+    ] ;
+
+    sh:property [
+        sh:path merits:validityPeriodStart ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:name "validity period start" ;
+        sh:message "validityPeriodStart must be of type xsd:date"
+    ] ;
+
+    sh:property [
+        sh:path merits:validityPeriodEnd ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:name "validity period end" ;
+        sh:message "validityPeriodEnd must be of type xsd:date"
+    ] ;
+
+    sh:property [
+        sh:path merits:originator ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "originator" ;
+        sh:message "originator must be of type string"
+    ] .
+
+# ----------------------------------------------------------------------------
+# Train Shape
+# ----------------------------------------------------------------------------
+shapes:TrainShape a sh:NodeShape ;
+    sh:targetClass merits:Train ;
+    sh:name "Train Shape" ;
+    sh:description "Validates train service instances" ;
+
+    sh:property [
+        sh:path dc:identifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "identifier" ;
+        sh:message "Train must have exactly one dc:identifier"
+    ] ;
+
+    sh:property [
+        sh:path merits:serviceNumber ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "service number" ;
+        sh:message "serviceNumber must be of type string"
+    ] ;
+
+    sh:property [
+        sh:path merits:serviceName ;
+        sh:or (
+            [ sh:datatype xsd:string ]
+            [ sh:datatype rdf:langString ]
+        ) ;
+        sh:maxCount 1 ;
+        sh:name "service name" ;
+        sh:message "serviceName must be a string or language-tagged string"
+    ] ;
+
+    sh:property [
+        sh:path merits:serviceMode ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "service mode" ;
+        sh:message "serviceMode must be of type string"
+    ] ;
+
+    sh:property [
+        sh:path merits:serviceProvider ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "service provider" ;
+        sh:message "serviceProvider must be of type string"
+    ] ;
+
+    sh:property [
+        sh:path merits:reservationCode ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "reservation code"
+    ] ;
+
+    sh:property [
+        sh:path merits:tariffCode ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "tariff code"
+    ] ;
+
+    sh:property [
+        sh:path merits:reservationCompany ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "reservation company"
+    ] ;
+
+    # Legacy binary string format (EDIFACT compatibility)
+    sh:property [
+        sh:path merits:operatingDays ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:pattern "^[01]{7}$" ;
+        sh:name "operating days (binary)" ;
+        sh:message "operatingDays must be a 7-character binary string (e.g., '1010101' for Mon/Wed/Fri/Sun)"
+    ] ;
+
+    # Semantic day-of-week using W3C Time Ontology (recommended)
+    # Use time:DayOfWeek instances: time:Monday, time:Tuesday, etc.
+    sh:property [
+        sh:path merits:operatesOnDay ;
+        sh:class time:DayOfWeek ;
+        sh:minCount 0 ;
+        sh:maxCount 7 ;
+        sh:name "operates on day (semantic)" ;
+        sh:message "operatesOnDay must reference valid time:DayOfWeek instances" ;
+        sh:description "Semantic representation using W3C Time Ontology day-of-week individuals"
+    ] ;
+
+    # Alternative: schema.org DayOfWeek (for broader compatibility)
+    sh:property [
+        sh:path schema:dayOfWeek ;
+        sh:in (
+            schema:Monday
+            schema:Tuesday
+            schema:Wednesday
+            schema:Thursday
+            schema:Friday
+            schema:Saturday
+            schema:Sunday
+        ) ;
+        sh:name "day of week (schema.org)" ;
+        sh:message "schema:dayOfWeek must be a valid schema.org DayOfWeek"
+    ] ;
+
+    sh:property [
+        sh:path schema:startDate ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:name "start date"
+    ] ;
+
+    sh:property [
+        sh:path schema:endDate ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:name "end date"
+    ] .
+
+# ----------------------------------------------------------------------------
+# PointOfRoute Shape
+# ----------------------------------------------------------------------------
+shapes:PointOfRouteShape a sh:NodeShape ;
+    sh:targetClass merits:PointOfRoute ;
+    sh:name "Point of Route Shape" ;
+    sh:description "Validates stops on a train's route" ;
+
+    sh:property [
+        sh:path dc:identifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "identifier" ;
+        sh:message "PointOfRoute must have exactly one dc:identifier"
+    ] ;
+
+    sh:property [
+        sh:path merits:belongsToTrain ;
+        sh:class merits:Train ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "belongs to train" ;
+        sh:message "PointOfRoute must belong to exactly one Train"
+    ] ;
+
+    sh:property [
+        sh:path merits:uicCode ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[0-9]{9}$" ;
+        sh:name "UIC code" ;
+        sh:message "uicCode must be a 9-digit string"
+    ] ;
+
+    sh:property [
+        sh:path merits:stopNumber ;
+        sh:datatype xsd:integer ;
+        sh:maxCount 1 ;
+        sh:minInclusive 1 ;
+        sh:name "stop number" ;
+        sh:message "stopNumber must be a positive integer"
+    ] ;
+
+    sh:property [
+        sh:path merits:arrivalTime ;
+        sh:datatype xsd:time ;
+        sh:maxCount 1 ;
+        sh:name "arrival time"
+    ] ;
+
+    sh:property [
+        sh:path merits:departureTime ;
+        sh:datatype xsd:time ;
+        sh:maxCount 1 ;
+        sh:name "departure time"
+    ] ;
+
+    sh:property [
+        sh:path merits:arrivalOffset ;
+        sh:datatype xsd:integer ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:name "arrival offset" ;
+        sh:message "arrivalOffset must be a non-negative integer"
+    ] ;
+
+    sh:property [
+        sh:path merits:departureOffset ;
+        sh:datatype xsd:integer ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:name "departure offset" ;
+        sh:message "departureOffset must be a non-negative integer"
+    ] ;
+
+    sh:property [
+        sh:path merits:arrivalPlatform ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "arrival platform"
+    ] ;
+
+    sh:property [
+        sh:path merits:departurePlatform ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "departure platform"
+    ] ;
+
+    sh:property [
+        sh:path merits:property ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "location qualifier/property"
+    ] .
+
+# ----------------------------------------------------------------------------
+# TrainConnection Shape
+# ----------------------------------------------------------------------------
+shapes:TrainConnectionShape a sh:NodeShape ;
+    sh:targetClass merits:TrainConnection ;
+    sh:name "Train Connection Shape" ;
+    sh:description "Validates connection information between trains" ;
+
+    sh:property [
+        sh:path dc:identifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "identifier"
+    ] ;
+
+    sh:property [
+        sh:path merits:atPointOfRoute ;
+        sh:class merits:PointOfRoute ;
+        sh:maxCount 1 ;
+        sh:name "at point of route" ;
+        sh:message "atPointOfRoute must reference a PointOfRoute instance"
+    ] ;
+
+    sh:property [
+        sh:path merits:forTrain ;
+        sh:class merits:Train ;
+        sh:maxCount 1 ;
+        sh:name "for train"
+    ] ;
+
+    sh:property [
+        sh:path merits:connectedService ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "connected service"
+    ] ;
+
+    sh:property [
+        sh:path merits:relationValue ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "relation value"
+    ] ;
+
+    sh:property [
+        sh:path merits:transferTime ;
+        sh:datatype xsd:integer ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:name "transfer time" ;
+        sh:message "transferTime must be a non-negative integer (minutes)"
+    ] ;
+
+    sh:property [
+        sh:path merits:transferCertainty ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "transfer certainty"
+    ] .
+
+# ----------------------------------------------------------------------------
+# OriginDestinationInfo Shape
+# ----------------------------------------------------------------------------
+shapes:OriginDestinationInfoShape a sh:NodeShape ;
+    sh:targetClass merits:OriginDestinationInfo ;
+    sh:name "Origin-Destination Info Shape" ;
+    sh:description "Validates origin-destination information for train services" ;
+
+    sh:property [
+        sh:path dc:identifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "identifier"
+    ] ;
+
+    sh:property [
+        sh:path merits:belongsToTrain ;
+        sh:class merits:Train ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "belongs to train" ;
+        sh:message "OriginDestinationInfo must belong to exactly one Train"
+    ] ;
+
+    sh:property [
+        sh:path merits:fromStopNumber ;
+        sh:datatype xsd:integer ;
+        sh:maxCount 1 ;
+        sh:minInclusive 1 ;
+        sh:name "from stop number"
+    ] ;
+
+    sh:property [
+        sh:path merits:toStopNumber ;
+        sh:datatype xsd:integer ;
+        sh:maxCount 1 ;
+        sh:minInclusive 1 ;
+        sh:name "to stop number"
+    ] ;
+
+    sh:property [
+        sh:path merits:equipment ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "equipment/brand code"
+    ] .
+
+# ----------------------------------------------------------------------------
+# Stop Shape
+# ----------------------------------------------------------------------------
+shapes:StopShape a sh:NodeShape ;
+    sh:targetClass merits:Stop ;
+    sh:name "Stop Shape" ;
+    sh:description "Validates railway station/stop location data" ;
+
+    sh:property [
+        sh:path dc:identifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "identifier"
+    ] ;
+
+    sh:property [
+        sh:path merits:uicCode ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[0-9]{9}$" ;
+        sh:name "UIC code" ;
+        sh:message "uicCode must be a 9-digit string"
+    ] ;
+
+    sh:property [
+        sh:path schema:name ;
+        sh:or (
+            [ sh:datatype xsd:string ]
+            [ sh:datatype rdf:langString ]
+        ) ;
+        sh:minCount 1 ;
+        sh:name "name" ;
+        sh:message "Stop must have at least one name"
+    ] ;
+
+    sh:property [
+        sh:path merits:shortName ;
+        sh:or (
+            [ sh:datatype xsd:string ]
+            [ sh:datatype rdf:langString ]
+        ) ;
+        sh:maxCount 1 ;
+        sh:name "short name"
+    ] ;
+
+    sh:property [
+        sh:path merits:functionCode ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "function code"
+    ] ;
+
+    sh:property [
+        sh:path schema:addressCountry ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:pattern "^[A-Z]{2}$" ;
+        sh:name "country code" ;
+        sh:message "addressCountry must be a 2-letter ISO country code"
+    ] ;
+
+    sh:property [
+        sh:path geo:lat ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "latitude"
+    ] ;
+
+    sh:property [
+        sh:path geo:long ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "longitude"
+    ] ;
+
+    sh:property [
+        sh:path schema:validFrom ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:name "valid from"
+    ] ;
+
+    sh:property [
+        sh:path schema:validThrough ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:name "valid through"
+    ] ;
+
+    sh:property [
+        sh:path merits:defaultTransferTime ;
+        sh:datatype xsd:integer ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:name "default transfer time" ;
+        sh:message "defaultTransferTime must be a non-negative integer (minutes)"
+    ] ;
+
+    sh:property [
+        sh:path merits:timezone1 ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "timezone 1"
+    ] ;
+
+    sh:property [
+        sh:path merits:timezone2 ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "timezone 2"
+    ] .
+
+# ----------------------------------------------------------------------------
+# StationSynonym Shape
+# ----------------------------------------------------------------------------
+shapes:StationSynonymShape a sh:NodeShape ;
+    sh:targetClass merits:StationSynonym ;
+    sh:name "Station Synonym Shape" ;
+    sh:description "Validates alternative names for railway stations" ;
+
+    sh:property [
+        sh:path dc:identifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "identifier"
+    ] ;
+
+    sh:property [
+        sh:path merits:forStop ;
+        sh:class merits:Stop ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "for stop" ;
+        sh:message "StationSynonym must reference exactly one Stop"
+    ] ;
+
+    sh:property [
+        sh:path merits:uicCode ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:pattern "^[0-9]{9}$" ;
+        sh:name "UIC code"
+    ] ;
+
+    sh:property [
+        sh:path schema:alternateName ;
+        sh:or (
+            [ sh:datatype xsd:string ]
+            [ sh:datatype rdf:langString ]
+        ) ;
+        sh:minCount 1 ;
+        sh:name "alternate name" ;
+        sh:message "StationSynonym must have at least one alternateName"
+    ] ;
+
+    sh:property [
+        sh:path merits:language ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "language code"
+    ] .
+
+# ----------------------------------------------------------------------------
+# MinimumConnectionTime Shape
+# ----------------------------------------------------------------------------
+shapes:MinimumConnectionTimeShape a sh:NodeShape ;
+    sh:targetClass merits:MinimumConnectionTime ;
+    sh:name "Minimum Connection Time Shape" ;
+    sh:description "Validates minimum transfer times at stations" ;
+
+    sh:property [
+        sh:path dc:identifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "identifier"
+    ] ;
+
+    sh:property [
+        sh:path merits:atStop ;
+        sh:class merits:Stop ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "at stop" ;
+        sh:message "MinimumConnectionTime must reference exactly one Stop"
+    ] ;
+
+    sh:property [
+        sh:path merits:uicCode ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:pattern "^[0-9]{9}$" ;
+        sh:name "UIC code"
+    ] ;
+
+    sh:property [
+        sh:path merits:connectionTime ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:name "connection time" ;
+        sh:message "connectionTime is required and must be a non-negative integer (minutes)"
+    ] ;
+
+    sh:property [
+        sh:path merits:serviceBrand1 ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "service brand 1"
+    ] ;
+
+    sh:property [
+        sh:path merits:serviceBrand2 ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "service brand 2"
+    ] ;
+
+    sh:property [
+        sh:path merits:serviceProvider1 ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "service provider 1"
+    ] ;
+
+    sh:property [
+        sh:path merits:serviceProvider2 ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "service provider 2"
+    ] .
+
+# ----------------------------------------------------------------------------
+# Footpath Shape
+# ----------------------------------------------------------------------------
+shapes:FootpathShape a sh:NodeShape ;
+    sh:targetClass merits:Footpath ;
+    sh:name "Footpath Shape" ;
+    sh:description "Validates walking connections between stations" ;
+
+    sh:property [
+        sh:path dc:identifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "identifier"
+    ] ;
+
+    sh:property [
+        sh:path merits:fromStop ;
+        sh:class merits:Stop ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "from stop" ;
+        sh:message "Footpath must have exactly one fromStop reference"
+    ] ;
+
+    sh:property [
+        sh:path merits:uicCode1 ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:pattern "^[0-9]{9}$" ;
+        sh:name "UIC code 1 (origin)"
+    ] ;
+
+    sh:property [
+        sh:path merits:uicCode2 ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:pattern "^[0-9]{9}$" ;
+        sh:name "UIC code 2 (destination)"
+    ] ;
+
+    sh:property [
+        sh:path merits:duration ;
+        sh:datatype xsd:integer ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:name "duration" ;
+        sh:message "duration must be a non-negative integer"
+    ] ;
+
+    sh:property [
+        sh:path merits:durationUnit ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:in ( "MIN" "HRS" ) ;
+        sh:name "duration unit" ;
+        sh:message "durationUnit must be 'MIN' or 'HRS'"
+    ] ;
+
+    sh:property [
+        sh:path merits:relationshipCode ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "relationship code"
+    ] ;
+
+    sh:property [
+        sh:path merits:footpathOrHierarchy ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:name "footpath or hierarchy indicator"
+    ] .
+
+# ============================================================================
+# SEMANTIC OPERATING SCHEDULE MODEL (using W3C Time Ontology)
+# ============================================================================
+#
+# This section provides shapes for a more semantic representation of
+# operating days using the W3C Time Ontology (https://www.w3.org/TR/owl-time/).
+#
+# Binary "1010101" → Semantic representation:
+#   Position: 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat, 7=Sun
+#   "1010101" means: operates on Monday, Wednesday, Friday, Sunday
+#
+# Benefits of semantic approach:
+#   - Machine-readable day references
+#   - Interoperable with GTFS, schema.org, and other vocabularies
+#   - Enables SPARQL queries like: "Find all trains operating on Monday"
+#   - Supports reasoning and inference
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# W3C Time Ontology DayOfWeek Individuals (reference)
+# ----------------------------------------------------------------------------
+# These are defined in the Time Ontology but listed here for validation:
+#   time:Monday, time:Tuesday, time:Wednesday, time:Thursday,
+#   time:Friday, time:Saturday, time:Sunday
+
+# ----------------------------------------------------------------------------
+# Operating Schedule Shape (for semantic day representation)
+# ----------------------------------------------------------------------------
+shapes:OperatingScheduleShape a sh:NodeShape ;
+    sh:targetClass merits:OperatingSchedule ;
+    sh:name "Operating Schedule Shape" ;
+    sh:description "Validates semantic operating schedule with Time Ontology days" ;
+
+    sh:property [
+        sh:path dc:identifier ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "identifier"
+    ] ;
+
+    # Link to the train service
+    sh:property [
+        sh:path merits:forTrain ;
+        sh:class merits:Train ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "for train" ;
+        sh:message "OperatingSchedule must be associated with exactly one Train"
+    ] ;
+
+    # Semantic days of operation using Time Ontology
+    sh:property [
+        sh:path time:dayOfWeek ;
+        sh:class time:DayOfWeek ;
+        sh:minCount 1 ;
+        sh:maxCount 7 ;
+        sh:name "day of week" ;
+        sh:message "Must specify at least one day of operation using time:DayOfWeek"
+    ] ;
+
+    # Validity period using Time Ontology proper intervals
+    sh:property [
+        sh:path time:hasBeginning ;
+        sh:class time:Instant ;
+        sh:maxCount 1 ;
+        sh:name "schedule start"
+    ] ;
+
+    sh:property [
+        sh:path time:hasEnd ;
+        sh:class time:Instant ;
+        sh:maxCount 1 ;
+        sh:name "schedule end"
+    ] ;
+
+    # Alternative: using schema.org for broader compatibility
+    sh:property [
+        sh:path schema:validFrom ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:name "valid from date"
+    ] ;
+
+    sh:property [
+        sh:path schema:validThrough ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:name "valid through date"
+    ] ;
+
+    # Exception dates (non-operating days within the period)
+    sh:property [
+        sh:path merits:exceptionDate ;
+        sh:datatype xsd:date ;
+        sh:name "exception date" ;
+        sh:description "Specific dates when service does NOT operate despite day-of-week pattern"
+    ] ;
+
+    # Additional operating dates (extra days outside normal pattern)
+    sh:property [
+        sh:path merits:additionalDate ;
+        sh:datatype xsd:date ;
+        sh:name "additional operating date" ;
+        sh:description "Specific dates when service operates in addition to day-of-week pattern"
+    ] .
+
+# ----------------------------------------------------------------------------
+# Time Instant Shape (for precise temporal references)
+# ----------------------------------------------------------------------------
+shapes:TimeInstantShape a sh:NodeShape ;
+    sh:targetClass time:Instant ;
+    sh:name "Time Instant Shape" ;
+    sh:description "Validates W3C Time Ontology Instant instances" ;
+
+    sh:property [
+        sh:path time:inXSDDate ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:name "XSD date"
+    ] ;
+
+    sh:property [
+        sh:path time:inXSDDateTime ;
+        sh:datatype xsd:dateTime ;
+        sh:maxCount 1 ;
+        sh:name "XSD datetime"
+    ] .
+
+# ----------------------------------------------------------------------------
+# GTFS-Compatible Calendar Shape (for transit data interoperability)
+# ----------------------------------------------------------------------------
+shapes:GTFSCalendarShape a sh:NodeShape ;
+    sh:targetClass gtfs:Calendar ;
+    sh:name "GTFS Calendar Shape" ;
+    sh:description "Validates GTFS-compatible calendar/service patterns" ;
+
+    sh:property [
+        sh:path gtfs:monday ;
+        sh:datatype xsd:boolean ;
+        sh:maxCount 1 ;
+        sh:name "operates Monday"
+    ] ;
+
+    sh:property [
+        sh:path gtfs:tuesday ;
+        sh:datatype xsd:boolean ;
+        sh:maxCount 1 ;
+        sh:name "operates Tuesday"
+    ] ;
+
+    sh:property [
+        sh:path gtfs:wednesday ;
+        sh:datatype xsd:boolean ;
+        sh:maxCount 1 ;
+        sh:name "operates Wednesday"
+    ] ;
+
+    sh:property [
+        sh:path gtfs:thursday ;
+        sh:datatype xsd:boolean ;
+        sh:maxCount 1 ;
+        sh:name "operates Thursday"
+    ] ;
+
+    sh:property [
+        sh:path gtfs:friday ;
+        sh:datatype xsd:boolean ;
+        sh:maxCount 1 ;
+        sh:name "operates Friday"
+    ] ;
+
+    sh:property [
+        sh:path gtfs:saturday ;
+        sh:datatype xsd:boolean ;
+        sh:maxCount 1 ;
+        sh:name "operates Saturday"
+    ] ;
+
+    sh:property [
+        sh:path gtfs:sunday ;
+        sh:datatype xsd:boolean ;
+        sh:maxCount 1 ;
+        sh:name "operates Sunday"
+    ] ;
+
+    sh:property [
+        sh:path gtfs:startDate ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "service start date"
+    ] ;
+
+    sh:property [
+        sh:path gtfs:endDate ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "service end date"
+    ] .
+
+# ----------------------------------------------------------------------------
+# DayOfWeek Validation (ensure only valid day instances are used)
+# ----------------------------------------------------------------------------
+shapes:DayOfWeekShape a sh:NodeShape ;
+    sh:targetClass time:DayOfWeek ;
+    sh:name "Day of Week Shape" ;
+    sh:description "Ensures only valid W3C Time Ontology day individuals are used" ;
+
+    sh:in (
+        time:Monday
+        time:Tuesday
+        time:Wednesday
+        time:Thursday
+        time:Friday
+        time:Saturday
+        time:Sunday
+    ) ;
+    sh:message "DayOfWeek must be one of: time:Monday, time:Tuesday, time:Wednesday, time:Thursday, time:Friday, time:Saturday, time:Sunday" .
