@@ -71,7 +71,7 @@ shapes:MessageMetadataShape a sh:NodeShape ;
 # Train Shape
 # ----------------------------------------------------------------------------
 shapes:TrainShape a sh:NodeShape ;
-    sh:targetClass merits:Train ;
+    sh:targetClass era:Train ;
     sh:name "Train Shape" ;
     sh:description "Validates train service instances" ;
 
@@ -211,7 +211,7 @@ shapes:PointOfRouteShape a sh:NodeShape ;
 
     sh:property [
         sh:path merits:belongsToTrain ;
-        sh:class merits:Train ;
+        sh:class era:Train ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
         sh:name "belongs to train" ;
@@ -294,7 +294,7 @@ shapes:PointOfRouteShape a sh:NodeShape ;
 # TrainConnection Shape
 # ----------------------------------------------------------------------------
 shapes:TrainConnectionShape a sh:NodeShape ;
-    sh:targetClass merits:TrainConnection ;
+    sh:targetClass era:TrainConnection ;
     sh:name "Train Connection Shape" ;
     sh:description "Validates connection information between trains" ;
 
@@ -316,7 +316,7 @@ shapes:TrainConnectionShape a sh:NodeShape ;
 
     sh:property [
         sh:path merits:forTrain ;
-        sh:class merits:Train ;
+        sh:class era:Train ;
         sh:maxCount 1 ;
         sh:name "for train"
     ] ;
@@ -369,7 +369,7 @@ shapes:OriginDestinationInfoShape a sh:NodeShape ;
 
     sh:property [
         sh:path merits:belongsToTrain ;
-        sh:class merits:Train ;
+        sh:class era:Train ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
         sh:name "belongs to train" ;
@@ -426,7 +426,7 @@ shapes:StopShape a sh:NodeShape ;
     ] ;
 
     sh:property [
-        sh:path schema:name ;
+        sh:path era:opName ;
         sh:or (
             [ sh:datatype xsd:string ]
             [ sh:datatype rdf:langString ]
@@ -752,7 +752,7 @@ shapes:OperatingScheduleShape a sh:NodeShape ;
     # Link to the train service
     sh:property [
         sh:path merits:forTrain ;
-        sh:class merits:Train ;
+        sh:class era:Train ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
         sh:name "for train" ;

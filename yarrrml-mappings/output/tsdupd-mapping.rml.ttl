@@ -155,7 +155,7 @@
 :map_stop_000 rr:predicateObjectMap :pom_011.
 :pm_011 a rr:PredicateMap.
 :pom_011 rr:predicateMap :pm_011.
-:pm_011 rr:constant schema:name.
+:pm_011 rr:constant <era:opName>.
 :pom_011 rr:objectMap :om_011.
 :om_011 a rr:ObjectMap;
     rml:reference "location_name";

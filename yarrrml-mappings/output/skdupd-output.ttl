@@ -179,7 +179,7 @@
   merits:unloadingVehicles "";
   dc:identifier "4" .
 
-<http://example.org/merits/skdupd#relation/1> a merits:TrainConnection;
+<http://example.org/merits/skdupd#relation/1> a <era:TrainConnection>;
   merits:atPointOfRoute <http://example.org/merits/skdupd#por/2>;
   merits:connectedService "02";
   merits:forTrain <http://example.org/merits/skdupd#train/1>;
@@ -188,7 +188,7 @@
   merits:transferTime ""^^xsd:integer;
   dc:identifier "1" .
 
-<http://example.org/merits/skdupd#relation/2> a merits:TrainConnection;
+<http://example.org/merits/skdupd#relation/2> a <era:TrainConnection>;
   merits:atPointOfRoute <http://example.org/merits/skdupd#por/2>;
   merits:connectedService "03";
   merits:forTrain <http://example.org/merits/skdupd#train/1>;
@@ -197,7 +197,7 @@
   merits:transferTime ""^^xsd:integer;
   dc:identifier "2" .
 
-<http://example.org/merits/skdupd#relation/3> a merits:TrainConnection;
+<http://example.org/merits/skdupd#relation/3> a <era:TrainConnection>;
   merits:atPointOfRoute <http://example.org/merits/skdupd#por/2>;
   merits:connectedService "45";
   merits:forTrain <http://example.org/merits/skdupd#train/1>;
@@ -206,7 +206,7 @@
   merits:transferTime 10;
   dc:identifier "3" .
 
-<http://example.org/merits/skdupd#relation/4> a merits:TrainConnection;
+<http://example.org/merits/skdupd#relation/4> a <era:TrainConnection>;
   merits:atPointOfRoute <http://example.org/merits/skdupd#por/2>;
   merits:connectedService "60";
   merits:forTrain <http://example.org/merits/skdupd#train/1>;
@@ -215,7 +215,7 @@
   merits:transferTime 30;
   dc:identifier "4" .
 
-<http://example.org/merits/skdupd#relation/5> a merits:TrainConnection;
+<http://example.org/merits/skdupd#relation/5> a <era:TrainConnection>;
   merits:atPointOfRoute <http://example.org/merits/skdupd#por/2>;
   merits:connectedService "75";
   merits:forTrain <http://example.org/merits/skdupd#train/1>;
@@ -224,7 +224,7 @@
   merits:transferTime ""^^xsd:integer;
   dc:identifier "5" .
 
-<http://example.org/merits/skdupd#train/1> a merits:Train, schema:TrainTrip;
+<http://example.org/merits/skdupd#train/1> a <era:Train>, schema:TrainTrip;
   merits:informationProvider "";
   merits:operatingDays "101111";
   merits:reservationCode "11";

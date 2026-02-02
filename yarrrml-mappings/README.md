@@ -121,7 +121,7 @@ The `merits-shapes.ttl` file provides comprehensive validation shapes:
 | Shape | Target Class | Key Validations |
 |-------|--------------|-----------------|
 | `MessageMetadataShape` | `merits:MessageMetadata` | Required identifier, date validations |
-| `TrainShape` | `merits:Train` | Service number, operating days pattern |
+| `TrainShape` | `era:Train` | Service number, operating days pattern |
 | `PointOfRouteShape` | `merits:PointOfRoute` | UIC code (9-digit), time validations |
 | `StopShape` | `merits:Stop` | UIC code, country code (ISO 2-letter) |
 | `OperatingScheduleShape` | `merits:OperatingSchedule` | Semantic days, exception dates |
@@ -323,7 +323,7 @@ PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 SELECT ?stopName ?lat ?long ?connectedStop ?walkTime
 WHERE {
   ?stop a era:Stop ;
-        schema:name ?stopName ;
+        era:opName ?stopName ;
         geo:lat ?lat ;
         geo:long ?long .
 

@@ -35,7 +35,7 @@ mappings:
         delimiter: ';'
     s: skdupd:train/$(train_id)
     po:
-      - [a, merits:Train]
+      - [a, era:Train]
       - [a, schema:TrainTrip]
       - [dct:identifier, $(train_id)]
       - [merits:serviceNumber, $(service_number)]
@@ -95,7 +95,7 @@ mappings:
         delimiter: ';'
     s: skdupd:relation/$(relation_id)
     po:
-      - [a, merits:TrainConnection]
+      - [a, era:TrainConnection]
       - [dct:identifier, $(relation_id)]
       - [merits:atPointOfRoute, skdupd:por/$(por_id)~iri]
       - [merits:forTrain, skdupd:train/$(train_id)~iri]

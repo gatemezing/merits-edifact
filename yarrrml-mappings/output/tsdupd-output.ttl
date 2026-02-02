@@ -185,6 +185,7 @@
   dc:identifier "2022-03-24T112355" .
 
 <http://example.org/merits/tsdupd#stop/1> a merits:Stop, schema:Place, schema:TrainStation;
+  <era:opName> "Piraeus? + : * '"@en;
   merits:defaultTransferTime 5;
   merits:functionCode "29";
   merits:reservationCode "007300101";
@@ -194,13 +195,13 @@
   merits:uicCode "007300101";
   dc:identifier "1";
   schema:addressCountry "GR";
-  schema:name "Piraeus? + : * '"@en;
   schema:validFrom "2021-08-12"^^xsd:date;
   schema:validThrough "2999-12-31"^^xsd:date;
   geo:lat "375656N";
   geo:long "233833E" .
 
 <http://example.org/merits/tsdupd#stop/2> a merits:Stop, schema:Place, schema:TrainStation;
+  <era:opName> "BIELSK PODLASKI"@en;
   merits:defaultTransferTime 4;
   merits:functionCode "29";
   merits:reservationCode "5101101";
@@ -210,13 +211,13 @@
   merits:uicCode "005102443";
   dc:identifier "2";
   schema:addressCountry "PL";
-  schema:name "BIELSK PODLASKI"@en;
   schema:validFrom "2022-07-29"^^xsd:date;
   schema:validThrough "2999-12-31"^^xsd:date;
   geo:lat "524541N";
   geo:long "231117E" .
 
 <http://example.org/merits/tsdupd#stop/3> a merits:Stop, schema:Place, schema:TrainStation;
+  <era:opName> "SUCHA BESKIDZKA"@en;
   merits:defaultTransferTime 2;
   merits:functionCode "29";
   merits:reservationCode "005100183";
@@ -226,13 +227,13 @@
   merits:uicCode "005107840";
   dc:identifier "3";
   schema:addressCountry "PL";
-  schema:name "SUCHA BESKIDZKA"@en;
   schema:validFrom "2020-12-03"^^xsd:date;
   schema:validThrough "2999-12-31"^^xsd:date;
   geo:lat "494426N";
   geo:long "193450E" .
 
 <http://example.org/merits/tsdupd#stop/4> a merits:Stop, schema:Place, schema:TrainStation;
+  <era:opName> "MONTCHEVRIER \"LA MESSILLE\""@en;
   merits:defaultTransferTime ""^^xsd:integer;
   merits:functionCode "29";
   merits:reservationCode "";
@@ -242,13 +243,13 @@
   merits:uicCode "008734657";
   dc:identifier "4";
   schema:addressCountry "FR";
-  schema:name "MONTCHEVRIER \"LA MESSILLE\""@en;
   schema:validFrom "2014-05-07"^^xsd:date;
   schema:validThrough "2999-12-31"^^xsd:date;
   geo:lat "";
   geo:long "" .
 
 <http://example.org/merits/tsdupd#stop/5> a merits:Stop, schema:Place, schema:TrainStation;
+  <era:opName> "MILANO VILLAPIZZONE"@en;
   merits:defaultTransferTime 10;
   merits:functionCode "29";
   merits:reservationCode "008300000";
@@ -258,13 +259,13 @@
   merits:uicCode "008301666";
   dc:identifier "5";
   schema:addressCountry "IT";
-  schema:name "MILANO VILLAPIZZONE"@en;
   schema:validFrom "2002-10-24"^^xsd:date;
   schema:validThrough "2008-11-12"^^xsd:date;
   geo:lat "453015N";
   geo:long "090839E" .
 
 <http://example.org/merits/tsdupd#stop/6> a merits:Stop, schema:Place, schema:TrainStation;
+  <era:opName> "MILANO CENTRALE (TR. NORD MILA"@en;
   merits:defaultTransferTime 10;
   merits:functionCode "29";
   merits:reservationCode "";
@@ -274,7 +275,6 @@
   merits:uicCode "008301699";
   dc:identifier "6";
   schema:addressCountry "IT";
-  schema:name "MILANO CENTRALE (TR. NORD MILA"@en;
   schema:validFrom "1987-12-31"^^xsd:date;
   schema:validThrough "2008-12-01"^^xsd:date;
   geo:lat "";

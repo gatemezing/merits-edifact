@@ -42,7 +42,7 @@ mappings:
       - [dct:identifier, $(stop_id)]
       - [merits:functionCode, $(function_code)]
       - [merits:uicCode, $(uic_code)]
-      - p: schema:name
+      - p: era:opName
         o:
           value: $(location_name)
           language: en
