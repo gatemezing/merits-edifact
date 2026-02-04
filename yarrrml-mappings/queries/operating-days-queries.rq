@@ -213,3 +213,45 @@ WHERE {
 #     ?schedule era:exceptionDate ?exceptionDate .
 # }
 # ORDER BY ?train ?exceptionDate
+
+# ============================================================================
+# STOP-RELATED QUERIES (using era:opName)
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Query 11: Find all stops with their operational names
+# ----------------------------------------------------------------------------
+# SELECT ?stop ?opName ?uicCode ?country
+# WHERE {
+#     ?stop a era:Stop ;
+#           era:opName ?opName ;
+#           era:uicCode ?uicCode .
+#     OPTIONAL { ?stop schema:addressCountry ?country }
+# }
+# ORDER BY ?country ?opName
+
+# ----------------------------------------------------------------------------
+# Query 12: Find stops by country with coordinates
+# ----------------------------------------------------------------------------
+# PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+# SELECT ?stop ?opName ?lat ?long
+# WHERE {
+#     ?stop a era:Stop ;
+#           era:opName ?opName ;
+#           schema:addressCountry "IT" ;
+#           geo:lat ?lat ;
+#           geo:long ?long .
+# }
+
+# ----------------------------------------------------------------------------
+# Query 13: Find footpath connections between stops
+# ----------------------------------------------------------------------------
+# SELECT ?fromName ?toUic ?duration
+# WHERE {
+#     ?footpath a era:Footpath ;
+#               era:fromStop ?fromStop ;
+#               era:uicCode2 ?toUic ;
+#               era:duration ?duration .
+#     ?fromStop era:opName ?fromName .
+# }
+# ORDER BY ?fromName

@@ -286,6 +286,13 @@ era:shortName a owl:DatatypeProperty ;
     rdfs:label "short name" ;
     rdfs:range xsd:string .
 
+era:opName a owl:DatatypeProperty ;
+    rdfs:label "operational name"@en ;
+    rdfs:domain era:Stop ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The official operational name of a railway stop/station as used in MERITS data."@en ;
+    rdfs:subPropertyOf rdfs:label .
+
 era:timezone1 a owl:DatatypeProperty ;
     rdfs:label "timezone 1" ;
     rdfs:domain era:Stop ;
