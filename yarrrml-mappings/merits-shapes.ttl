@@ -47,12 +47,12 @@ shapes:MessageMetadataShape a sh:NodeShape ;
     sh:description "Validates metadata about EDIFACT messages" ;
 
     sh:property [
-        sh:path dc:identifier ;
+        sh:path dct:identifier ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
         sh:name "identifier" ;
-        sh:message "MessageMetadata must have exactly one dc:identifier of type string"
+        sh:message "MessageMetadata must have exactly one dct:identifier of type string"
     ] ;
 
     sh:property [
@@ -88,12 +88,12 @@ shapes:TrainShape a sh:NodeShape ;
     sh:description "Validates train service instances" ;
 
     sh:property [
-        sh:path dc:identifier ;
+        sh:path dct:identifier ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
         sh:name "identifier" ;
-        sh:message "Train must have exactly one dc:identifier"
+        sh:message "Train must have exactly one dct:identifier"
     ] ;
 
     sh:property [
@@ -213,12 +213,12 @@ shapes:PointOfRouteShape a sh:NodeShape ;
     sh:description "Validates stops on a train's route" ;
 
     sh:property [
-        sh:path dc:identifier ;
+        sh:path dct:identifier ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
         sh:name "identifier" ;
-        sh:message "PointOfRoute must have exactly one dc:identifier"
+        sh:message "PointOfRoute must have exactly one dct:identifier"
     ] ;
 
     sh:property [
@@ -311,7 +311,7 @@ shapes:TrainConnectionShape a sh:NodeShape ;
     sh:description "Validates connection information between trains" ;
 
     sh:property [
-        sh:path dc:identifier ;
+        sh:path dct:identifier ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
@@ -372,7 +372,7 @@ shapes:OriginDestinationInfoShape a sh:NodeShape ;
     sh:description "Validates origin-destination information for train services" ;
 
     sh:property [
-        sh:path dc:identifier ;
+        sh:path dct:identifier ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
@@ -420,7 +420,7 @@ shapes:StopShape a sh:NodeShape ;
     sh:description "Validates railway station/stop location data" ;
 
     sh:property [
-        sh:path dc:identifier ;
+        sh:path dct:identifier ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
@@ -534,7 +534,7 @@ shapes:StationSynonymShape a sh:NodeShape ;
     sh:description "Validates alternative names for railway stations" ;
 
     sh:property [
-        sh:path dc:identifier ;
+        sh:path dct:identifier ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
@@ -585,7 +585,7 @@ shapes:MinimumConnectionTimeShape a sh:NodeShape ;
     sh:description "Validates minimum transfer times at stations" ;
 
     sh:property [
-        sh:path dc:identifier ;
+        sh:path dct:identifier ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
@@ -656,7 +656,7 @@ shapes:FootpathShape a sh:NodeShape ;
     sh:description "Validates walking connections between stations" ;
 
     sh:property [
-        sh:path dc:identifier ;
+        sh:path dct:identifier ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
@@ -754,7 +754,7 @@ shapes:OperatingScheduleShape a sh:NodeShape ;
     sh:description "Validates semantic operating schedule with Time Ontology days" ;
 
     sh:property [
-        sh:path dc:identifier ;
+        sh:path dct:identifier ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
