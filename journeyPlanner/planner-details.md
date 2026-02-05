@@ -1,0 +1,45 @@
+# Planner/API detail table (auth, formats, limits, updates, coverage score)
+
+Reviewed: 2026-02-05
+
+## Coverage scoring rubric (1-5)
+1 = single operator or single city
+2 = metro area/county or single region
+3 = national but single-mode/limited operators OR multi-region subnational
+4 = national multi-operator multimodal
+5 = multi-country/cross-border
+
+Scores are best-effort based on public descriptions. If coverage varies by token or data feeds, this is noted in the Coverage column.
+
+## Table
+
+| Planner/API | Coverage | Auth model | Formats | Rate limits | Update frequency | Coverage score | Licensing | Pricing tiers | GTFS/NeTEx/SIRI support |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Entur Journey Planner v3 | Norway nationwide, multimodal public transport. | No API key; client identification required via `ET-Client-Name` header. | GraphQL (Transmodel-based) over HTTP; JSON. | Not published; strict rate limiting for unidentified clients. | Real-time info included; cadence not stated. | 4 | NLOD licence. | Not stated. | Not stated for GTFS/NeTEx/SIRI; Transmodel-based GraphQL. |
+| Digitransit Routing API | Finland + Estonia datasets; regional routers (HSL, Southwest Finland, Waltti). | API key required; header or query param `digitransit-subscription-key`. | GraphQL; JSON; routing data uses GTFS files; realtime via GTFS-RT. | Rate/quota limiting enforced; avoid >10 req/s; 0.5-1s delay recommended. | Realtime via GTFS-RT; cadence not stated. | 5 | CC BY 4.0 for Digitransit data; OSM-derived data under ODbL. | Free (no fees stated). | GTFS + GTFS-RT; NeTEx/SIRI not stated. |
+| Trafiklab SL Journey Planner v2 | Stockholm County (SL + Waxholmsbolaget). | No API key required; avoid excessive requests. | JSON. | Not stated; avoid excessive requests; premium account may increase limits. | Not stated. | 2 | License based on CC BY with additional terms (SL APIs on Trafiklab). | Premium account for higher limits mentioned; pricing not stated. | Not stated. |
+| TfL Journey Planner API | London (TfL journey planning). | Registration required; `app_key` query param via API portal. | XML responses. | Anonymous: 50 req/min; Product subscription: 500 req/min (higher on request). | Not stated. | 2 | TfL Transport Data Service licence (based on OGL v2 with TfL amendments). | Free; higher quotas via product subscription. | Not stated. |
+| iRail API | Belgium national rail timetable data. | No API key; user-agent recommended. | JSON/XML/JSONP (`format` parameter). | 3 req/s per IP; 5 burst; 429 on exceed. | Not stated; caching headers indicate validity. | 3 | Not stated in API docs. | Not stated. | Not stated. |
+| Navitia | Multi-region coverage; depends on token/coverage. | Token-based auth via `Authorization` header; token from PTA. | JSON (HATEOAS API). | Quota exists per token; limits not stated. | Not stated. | 3 | Data from networks as open data; license varies by dataset. | Not stated; access via token. | Not stated. |
+| transport.opendata.ch | Switzerland public transport (unofficial; uses search.ch service). | Auth not stated (public API). | JSON (REST). | Rate limit constrained by timetable.search.ch. | Not stated. | 4 | Not stated; API is unofficial and uses search.ch service. | Not stated. | Not stated. |
+| Transitous (MOTIS 2 API) | International, cross-border public transport routing. | No API key; User-Agent required; contact before heavy usage; non-commercial use. | MOTIS 2 API (OpenAPI). | No numeric limits; contact before heavy usage (best-effort). | Static feeds checked daily; GTFS-RT polled once per minute. | 5 | Usage policy restricts commercial use; data licenses vary by feed. | Free for non-commercial; contact for other use. | GTFS + NeTEx for static; GTFS-RT for realtime. |
+
+## Sources
+1. Entur Journey Planner v3 docs: https://developer.entur.org/pages-journeyplanner-journeyplanner/
+2. Digitransit APIs (rate limiting, GTFS-RT info): https://digitransit.fi/en/developers/apis/
+3. Digitransit API portal and registration (keys, quotas): https://digitransit.fi/en/developers/api-registration/
+4. Digitransit routing data API (GTFS files): https://digitransit.fi/en/developers/apis/2-routing-data-api/
+5. Digitransit realtime APIs (GTFS-RT): https://digitransit.fi/en/developers/apis/5-realtime-api/
+6. Digitransit terms of use (CC BY 4.0, ODbL, no fees): https://digitransit.fi/en/developers/apis/7-terms-of-use/
+7. Trafiklab SL Journey Planner v2: https://www.trafiklab.se/api/our-apis/sl/journey-planner-2/
+8. Trafiklab SL licence (terms, CC BY-based license, premium account): https://www.trafiklab.se/api/our-apis/sl/licence/
+9. TfL Journey Planner API dataset listing: https://findtransportdata.dft.gov.uk/dataset/tfl-journey-planner-api
+10. TfL API portal (registration/app_key): https://api-portal.tfl.gov.uk/
+11. TfL API products (rate limits): https://api-portal.tfl.gov.uk/products
+12. TfL Transport Data Service terms (license based on OGL v2 with TfL amendments): https://tfl.gov.uk/corporate/terms-and-conditions/transport-data-service
+13. iRail API docs (formats, limits): https://docs.irail.be/
+14. Navitia docs (token auth, JSON, coverage): https://doc.navitia.io/
+15. Transport API docs (rate limit): https://transport.opendata.ch/docs.html
+16. Transport API intro (unofficial API, search.ch backend): https://transport.opendata.ch/
+17. Transitous API usage policy (non-commercial, User-Agent): https://transitous.org/api/
+18. Transitous docs (GTFS/NeTEx, GTFS-RT, update frequency, license options): https://transitous.org/doc/
