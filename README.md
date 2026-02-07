@@ -8,5 +8,6 @@ It is reusing the code from https://github.com/UnionInternationalCheminsdeFer/ME
 ## Reuse
 1. ERA ontology
 2. Telematics ontology extension
+3. https://entur.atlassian.net/wiki/spaces/PUBLIC/pages/728563782/General+information+NeTEx
 
 
