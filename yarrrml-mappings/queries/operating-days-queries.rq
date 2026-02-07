@@ -255,3 +255,37 @@ WHERE {
 #     ?fromStop era:opName ?fromName .
 # }
 # ORDER BY ?fromName
+
+# ============================================================================
+# Example SPARQL Queries
+# ============================================================================
+
+# Query 1: Find all trains with their stops and times
+# SELECT ?trainName ?stopUIC ?arrival ?departure
+# WHERE {
+#   ?train a era:Train ;
+#          era:serviceName ?trainName .
+#   ?por era:belongsToTrain ?train ;
+#        era:uicCode ?stopUIC .
+#   OPTIONAL { ?por era:arrivalTime ?arrival }
+#   OPTIONAL { ?por era:departureTime ?departure }
+# }
+
+# Query 2: Find stations in Italy with their coordinates
+# SELECT ?name ?lat ?long
+# WHERE {
+#   ?stop a era:Stop ;
+#         era:opName ?name ;
+#         schema:addressCountry "IT" ;
+#         geo:lat ?lat ;
+#         geo:long ?long .
+# }
+
+# Query 3: Find walking connections from a station
+# SELECT ?fromStopName ?toStopUIC ?walkTime
+# WHERE {
+#   ?stop era:opName ?fromStopName .
+#   ?footpath era:fromStop ?stop ;
+#             era:toStopUicCode ?toStopUIC ;
+#             era:walkingTime ?walkTime .
+# }

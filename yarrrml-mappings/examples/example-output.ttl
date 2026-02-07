@@ -1,11 +1,9 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix era: <http://example.org/merits/ontology#> .
 @prefix skdupd: <http://example.org/merits/skdupd/> .
 @prefix tsdupd: <http://example.org/merits/tsdupd/> .
-@prefix meta: <http://example.org/merits/skdupd/meta/> .    
-@prefix schema: <http://schema.org/> .
+@prefix meta: <http://example.org/merits/skdupd/meta/> .
 @prefix dct: <http://purl.org/dc/terms/> .
 @prefix era: <http://data.europa.eu/949/> .
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
@@ -16,14 +14,14 @@
 
 # Message Metadata
 meta:2022-07-26T112758 a era:MessageMetadata ;
-    dct:identifier "2022-07-26T112758" ;
+    dct:identifier "2022-07-26T11:27:58" ;
     era:validityPeriodStart "2021-01-01"^^xsd:date ;
     era:validityPeriodEnd "2021-12-12"^^xsd:date ;
     era:originator "0000" ;
-    dct:created "2022-07-26T112758"^^xsd:dateTime .
+    dct:created "2022-07-26T11:27:58"^^xsd:dateTime .
 
 # Train Service
-skdupd:train/1 a era:Train, schema:TrainTrip ;
+skdupd:train-1 a era:Train ;
     dct:identifier "1" ;
     era:serviceNumber "3" ;
     era:serviceName "ALPHA TANGO"@en ;
@@ -39,9 +37,9 @@ skdupd:train/1 a era:Train, schema:TrainTrip ;
     era:endDate "2021-08-28"^^xsd:date .
 
 # Point of Route 1 - Departure Station
-skdupd:por/1 a era:PointOfRoute, era:OperationalPoint ;
+skdupd:por-1 a era:PointOfRoute, era:OperationalPoint ;
     dct:identifier "1" ;
-    era:belongsToTrain skdupd:train/1 ;
+    era:belongsToTrain skdupd:train-1 ;
     era:uicCode "006070001" ;
     era:departureTime "05:03:00"^^xsd:time ;
     era:departurePlatform "1" ;
@@ -52,9 +50,9 @@ skdupd:por/1 a era:PointOfRoute, era:OperationalPoint ;
     era:trfCode01 "1" .
 
 # Point of Route 2 - Intermediate Station with Connection Info
-skdupd:por/2 a era:PointOfRoute, era:OperationalPoint ;
+skdupd:por-2 a era:PointOfRoute, era:OperationalPoint ;
     dct:identifier "2" ;
-    era:belongsToTrain skdupd:train/1 ;
+    era:belongsToTrain skdupd:train-1 ;
     era:uicCode "006070013" ;
     era:arrivalTime "04:45:00"^^xsd:time ;
     era:arrivalOffset "1"^^xsd:integer ;
@@ -73,9 +71,9 @@ skdupd:por/2 a era:PointOfRoute, era:OperationalPoint ;
     era:trfCode01 "4" .
 
 # Point of Route 3 - Arrival Station
-skdupd:por/3 a era:PointOfRoute, era:OperationalPoint ;
+skdupd:por-3 a era:PointOfRoute, era:OperationalPoint ;
     dct:identifier "3" ;
-    era:belongsToTrain skdupd:train/1 ;
+    era:belongsToTrain skdupd:train-1 ;
     era:uicCode "006070016" ;
     era:arrivalTime "05:00:00"^^xsd:time ;
     era:distance "200"^^xsd:integer ;
@@ -84,17 +82,17 @@ skdupd:por/3 a era:PointOfRoute, era:OperationalPoint ;
     era:asdFirstTime01 "05:40:00"^^xsd:time .
 
 # Train Connection at Station 2
-skdupd:relation/1 a era:TrainConnection ;
+skdupd:relation-1 a era:TrainConnection ;
     dct:identifier "1" ;
-    era:atPointOfRoute skdupd:por/2 ;
+    era:atPointOfRoute skdupd:por-2 ;
     era:referenceFunctionCode "AUE" ;
     era:connectedServiceNumber "02" ;
     era:relationTypeCode "13" ;
     era:relationValue "8" .
 
-skdupd:relation/2 a era:TrainConnection;
+skdupd:relation-2 a era:TrainConnection;
     dct:identifier "2" ;
-    era:atPointOfRoute skdupd:por/2 ;
+    era:atPointOfRoute skdupd:por-2 ;
     era:referenceFunctionCode "AUE" ;
     era:connectedServiceNumber "45" ;
     era:relationTypeCode "13" ;
@@ -103,18 +101,18 @@ skdupd:relation/2 a era:TrainConnection;
     era:transferCertainty "1" .
 
 # Origin-Destination Information
-skdupd:odi/1 a era:OriginDestinationInfo ;
+skdupd:odi-1 a era:OriginDestinationInfo ;
     dct:identifier "1" ;
-    era:belongsToTrain skdupd:train/1 ;
+    era:belongsToTrain skdupd:train-1 ;
     era:fromStop "006070001" ;
     era:toStop "006070013" ;
     era:fromStopNumber "1"^^xsd:integer ;
     era:toStopNumber "2"^^xsd:integer ;
     era:brandCode "84" .
 
-skdupd:odi/2 a era:OriginDestinationInfo ;
+skdupd:odi-2 a era:OriginDestinationInfo ;
     dct:identifier "2" ;
-    era:belongsToTrain skdupd:train/1 ;
+    era:belongsToTrain skdupd:train-1 ;
     era:fromStop "006070013" ;
     era:toStop "006070016" ;
     era:fromStopNumber "2"^^xsd:integer ;
@@ -126,15 +124,15 @@ skdupd:odi/2 a era:OriginDestinationInfo ;
 # ============================================================================
 
 # Message Metadata
-tsdupd:meta/2022-03-24T112355 a era:MessageMetadata ;
-    dct:identifier "2022-03-24T112355" ;
+tsdupd:meta-2022-03-24T112355 a era:MessageMetadata ;
+    dct:identifier "2022-03-24T11:23:55" ;
     era:validityPeriodStart "2022-01-01"^^xsd:date ;
     era:validityPeriodEnd "2999-12-31"^^xsd:date ;
     era:originator "0000" ;
-    dct:created "2022-03-24T112355"^^xsd:dateTime .
+    dct:created "2022-03-24T11:23:55"^^xsd:dateTime .
 
 # Stop Information - Piraeus, Greece
-tsdupd:stop/1 a  era:OperationalPoint;
+tsdupd:stop-1 a  era:OperationalPoint;
     dct:identifier "1" ;
     era:functionCode "29" ;
     era:uicCode "007300101" ;
@@ -142,63 +140,63 @@ tsdupd:stop/1 a  era:OperationalPoint;
     era:shortName "Piraeus"@en ;
     geo:lat "375656N" ;
     geo:long "233833E" ;
-    schema:validFrom "2021-08-12"^^xsd:date ;
-    schema:validThrough "2999-12-31"^^xsd:date ;
+    era:validFrom "2021-08-12"^^xsd:date ;
+    era:validThrough "2999-12-31"^^xsd:date ;
     era:defaultTransferTime "5"^^xsd:integer ;
-    schema:addressCountry "GR" ;
+    era:country "GR" ;
     era:timezone1 "EET" ;
     era:timezone2 "2" ;
     era:reservationCode "007300101" .
 
 # Stop Information - Milano Villapizzone, Italy
-tsdupd:stop/2 a  era:OperationalPoint;
+tsdupd:stop-2 a  era:OperationalPoint;
     dct:identifier "2" ;
     era:functionCode "29" ;
     era:uicCode "008301666" ;
     era:opName "MILANO VILLAPIZZONE"@en ;
     geo:lat "453015N" ;
     geo:long "090839E" ;
-    schema:validFrom "2002-10-24"^^xsd:date ;
-    schema:validThrough "2008-11-12"^^xsd:date ;
+    era:validFrom "2002-10-24"^^xsd:date ;
+    era:validThrough "2008-11-12"^^xsd:date ;
     era:defaultTransferTime "10"^^xsd:integer ;
-    schema:addressCountry "IT" ;
+    era:country "IT" ;
     era:timezone1 "CET" ;
     era:timezone2 "1" .
 
 # Stop Information - Milano Centrale
-tsdupd:stop/3 a  era:OperationalPoint;
+tsdupd:stop-3 a  era:OperationalPoint;
     dct:identifier "3" ;
     era:functionCode "29" ;
     era:uicCode "008301699" ;
     era:opName "MILANO CENTRALE (TR. NORD MILA"@en ;
-    schema:validFrom "1987-12-31"^^xsd:date ;
-    schema:validThrough "2008-12-01"^^xsd:date ;
+    era:validFrom "1987-12-31"^^xsd:date ;
+    era:validThrough "2008-12-01"^^xsd:date ;
     era:defaultTransferTime "10"^^xsd:integer ;
-    schema:addressCountry "IT" ;
+    era:country "IT" ;
     era:timezone1 "CET" ;
     era:timezone2 "1" .
 
 # Synonym for Milano Centrale
-tsdupd:synonym/1 a era:StationSynonym ;
+tsdupd:synonym-1 a era:StationSynonym ;
     dct:identifier "1" ;
-    era:forStop tsdupd:stop/3 ;
+    era:forStop tsdupd:stop-3 ;
     era:referenceFunctionCode "AWN" ;
     era:synonymUicCode "008301700" ;
-    schema:alternateName "Milano Centrale Nord"@en .
+    era:alternateName "Milano Centrale Nord"@en .
 
 # Minimum Connection Time
-tsdupd:mct/1 a era:MinimumConnectionTime, schema:TransferAction ;
+tsdupd:mct-1 a era:MinimumConnectionTime ;
     dct:identifier "1" ;
-    era:atStop tsdupd:stop/3 ;
+    era:atStop tsdupd:stop-3 ;
     era:referenceFunctionCode "AWN" ;
     era:arrivalServiceNumber "008301700" ;
     era:connectionTime "10"^^xsd:integer ;
     era:relationTypeCode "13" ;
     era:relationValue "6" .
 
-tsdupd:mct/2 a era:MinimumConnectionTime, schema:TransferAction ;
+tsdupd:mct-2 a era:MinimumConnectionTime ;
     dct:identifier "2" ;
-    era:atStop tsdupd:stop/3 ;
+    era:atStop tsdupd:stop-3 ;
     era:referenceFunctionCode "AWN" ;
     era:arrivalServiceNumber "008301700" ;
     era:connectionTime "20"^^xsd:integer ;
@@ -206,9 +204,9 @@ tsdupd:mct/2 a era:MinimumConnectionTime, schema:TransferAction ;
     era:relationValue "6" .
 
 # Footpath Connection
-tsdupd:footpath/1 a era:Footpath, schema:WalkAction ;
+tsdupd:footpath-1 a era:Footpath ;
     dct:identifier "1" ;
-    era:fromStop tsdupd:stop/1 ;
+    era:fromStop tsdupd:stop-1 ;
     era:referenceFunctionCode "AWN" ;
     era:toStopUicCode "007350001" ;
     era:walkingTime "8"^^xsd:integer ;
@@ -233,9 +231,9 @@ tsdupd:footpath/1 a era:Footpath, schema:WalkAction ;
 # Query 2: Find stations in Italy with their coordinates
 # SELECT ?name ?lat ?long
 # WHERE {
-#   ?stop a era:Stop ;
+#   ?stop a era:OperationalPoint ;
 #         era:opName ?name ;
-#         schema:addressCountry "IT" ;
+#         era:country "IT" ;
 #         geo:lat ?lat ;
 #         geo:long ?long .
 # }

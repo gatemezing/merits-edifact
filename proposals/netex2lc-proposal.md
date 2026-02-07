@@ -4,7 +4,7 @@
 
 This document proposes the development of **netex2lc** and **siri2lc**, a pair of converters equivalent to the gtfs2lc tool suite, designed to transform European standard transit data formats (NeTEx and SIRI) into Linked Connections using RDF and Linked Data principles.
 
-**Key Innovation**: Leverage existing NeTEx RDF ontology (http://data.europa.eu/949/) to create a seamless conversion pipeline from European transit standards to Linked Connections.
+**Key Innovation**: Leverage existing NeTEx RDF ontology (http://data.europa.eu/949/) for RDF-aligned outputs while keeping the core conversion pipeline streaming and connection-rule based.
 
 ---
 
@@ -79,6 +79,7 @@ This proposal builds on:
              │                              │
              │  Uses NeTEx RDF Ontology     │
              │  (data.europa.eu/949/)       │
+             │  for RDF outputs (optional)  │
              │                              │
              ▼                              ▼
     ┌────────────────────────────────────────────────┐
@@ -101,31 +102,38 @@ This proposal builds on:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│ STEP 1: Parse NeTEx XML                                      │
+│ STEP 1: Parse + Normalize NeTEx XML                          │
 │   Input: NeTEx PublicationDelivery XML files                 │
-│   Process: XML parsing, validation against XSD              │
-│   Output: In-memory object model                            │
+│   Process: XML parsing, XSD validation, sorting/validation  │
+│   Output: In-memory canonical objects                        │
 └──────────────────────────────────────────────────────────────┘
                             ↓
 ┌──────────────────────────────────────────────────────────────┐
-│ STEP 2: Map to NeTEx RDF Ontology                            │
-│   Input: Parsed NeTEx objects                                │
-│   Process: Apply RML/R2RML mappings OR direct OWL mapping   │
-│   Output: RDF triples (NeTEx namespace)                     │
+│ STEP 2: Build Connection Rules (per ServiceJourney)          │
+│   Input: PassingTimes (ordered)                              │
+│   Process: Create stop-to-stop connection rules             │
+│   Output: Connection rules (no dates yet)                    │
 └──────────────────────────────────────────────────────────────┘
                             ↓
 ┌──────────────────────────────────────────────────────────────┐
-│ STEP 3: Transform to Linked Connections                      │
-│   Input: NeTEx RDF triples                                   │
-│   Process: SPARQL CONSTRUCT or custom transformation        │
-│   Output: Linked Connections RDF (lc: namespace)            │
+│ STEP 3: Expand by Service Days                               │
+│   Input: DayType + OperatingPeriod + DayTypeAssignment       │
+│   Process: Expand rules to dated connections                 │
+│   Output: Dated connections                                  │
 └──────────────────────────────────────────────────────────────┘
                             ↓
 ┌──────────────────────────────────────────────────────────────┐
 │ STEP 4: Serialize & Publish                                  │
-│   Input: Linked Connections RDF                              │
-│   Process: Serialize to JSON-LD, Turtle, N-Triples, or JSON │
-│   Output: Published fragments (time-based pages)            │
+│   Input: Dated connections                                   │
+│   Process: JSON/JSON-LD/Turtle/N-Triples serialization       │
+│   Output: Published fragments (time-based pages)             │
+└──────────────────────────────────────────────────────────────┘
+                            ↓
+┌──────────────────────────────────────────────────────────────┐
+│ STEP 5 (Optional): Post-process Join/Split                   │
+│   Input: Dated connections                                   │
+│   Process: Generate nextConnection chains                    │
+│   Output: Enhanced LC graph                                  │
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -144,6 +152,7 @@ This proposal builds on:
 - `SPARQLWrapper` - SPARQL queries
 - `click` - CLI interface
 - `jsonld` - JSON-LD serialization
+- Optional: disk-backed store (SQLite/LMDB) for large feeds
 
 ---
 
@@ -185,9 +194,16 @@ Convert NeTEx XML publications (static timetable data) into Linked Connections r
 
 ### 3.3 Transformation Logic
 
-#### 3.3.1 Connection Generation
+#### 3.3.1 Normalize and Validate Passing Times
 
-A **Connection** is created for each consecutive pair of TimetabledPassingTimes in a ServiceJourney:
+- Sort `TimetabledPassingTime` by `SequenceNumber` (or equivalent ordering field).
+- Validate strictly increasing sequence and time consistency.
+- Warn or fail on missing sequence numbers or non-monotonic times.
+- Normalize day offsets for overnight trips (e.g., `DayOffset` / `ArrivalDayOffset`).
+
+#### 3.3.2 Connection Rule Generation
+
+A **Connection rule** is created for each consecutive pair of TimetabledPassingTimes in a ServiceJourney (no service dates yet):
 
 ```python
 for service_journey in timetable_frame.service_journeys:
@@ -198,7 +214,7 @@ for service_journey in timetable_frame.service_journeys:
         arrival_pt = passing_times[i + 1]
 
         connection = LinkedConnection(
-            id=generate_uri(service_journey, departure_pt, arrival_pt),
+            id=generate_rule_id(service_journey, departure_pt, arrival_pt),
             departure_stop=departure_pt.stop_point_ref,
             departure_time=departure_pt.departure_time,
             arrival_stop=arrival_pt.stop_point_ref,
@@ -211,7 +227,22 @@ for service_journey in timetable_frame.service_journeys:
         yield connection
 ```
 
-#### 3.3.2 URI Strategy (RFC 6570)
+#### 3.3.3 Service-day Expansion
+
+Expand connection rules into dated connections using NeTEx service calendars:
+- `DayType` + `OperatingPeriod`
+- `DayTypeAssignment`
+- `DatedServiceJourney` (when present)
+
+```python
+for rule in connection_rules:
+    for service_day in resolve_service_days(rule.service_journey):
+        dated = rule.with_date(service_day)
+        dated.id = generate_connection_uri(dated)
+        yield dated
+```
+
+#### 3.3.4 URI Strategy (RFC 6570)
 
 **URI Templates** (configurable):
 
@@ -222,16 +253,16 @@ for service_journey in timetable_frame.service_journeys:
   "quay": "{baseUri}/stops/{stopPlaceId}/quays/{quayId}",
   "line": "{baseUri}/lines/{lineId}",
   "serviceJourney": "{baseUri}/journeys/{serviceJourneyId}",
-  "connection": "{baseUri}/connections/{departureTime(yyyyMMdd)}/{serviceJourneyId}/{sequence}"
+  "connection": "{baseUri}/connections/{departureTime(yyyyMMddHHmm)}/{serviceJourneyId}/{sequence}"
 }
 ```
 
 **Example URIs**:
 - Stop: `http://transport.example.org/stops/NSR:StopPlace:123`
 - Journey: `http://transport.example.org/journeys/RUT:ServiceJourney:456`
-- Connection: `http://transport.example.org/connections/20260205/RUT:ServiceJourney:456/3`
+- Connection: `http://transport.example.org/connections/202602050830/RUT:ServiceJourney:456/3`
 
-#### 3.3.3 RDF Output (JSON-LD)
+#### 3.3.5 RDF Output (JSON-LD)
 
 ```json
 {
@@ -244,7 +275,7 @@ for service_journey in timetable_frame.service_journeys:
   },
   "@graph": [
     {
-      "@id": "http://transport.example.org/connections/20260205/RUT:ServiceJourney:456/3",
+      "@id": "http://transport.example.org/connections/202602050830/RUT:ServiceJourney:456/3",
       "@type": "lc:Connection",
       "lc:departureStop": {
         "@id": "http://transport.example.org/stops/NSR:StopPlace:123",
@@ -309,6 +340,15 @@ NeTEx provides rich accessibility data:
 - Step-free access information
 - Audio/visual aids availability
 - Map to schema.org accessibility properties
+
+#### 3.4.4 Large Feed Handling
+- Optional disk-backed storage (SQLite/LMDB) to avoid memory pressure
+- Streaming serialization (NDJSON / chunked JSON-LD)
+- Optional gzip compression for fragments
+
+#### 3.4.5 Join/Split Post-processing (Optional)
+- Generate `nextConnection` links for split trips
+- Aligns with gtfs2lc post-processing utilities
 
 ---
 
@@ -431,7 +471,11 @@ def siri_et_to_linked_connections(estimated_timetable, static_netex):
 
             # Generate updated connection
             connection = LinkedConnection(
-                id=generate_connection_uri(static_journey, i),
+                id=generate_connection_uri(
+                    static_journey,
+                    departure_call.expected_departure_time,
+                    i
+                ),
                 departure_stop=departure_call.stop_point_ref,
                 departure_time=departure_call.expected_departure_time,
                 arrival_stop=arrival_call.stop_point_ref,
@@ -481,9 +525,10 @@ def enrich_with_vehicle_positions(connections, vehicle_monitoring):
     "lc": "http://semweb.mmlab.be/ns/linkedconnections#",
     "netex": "http://data.europa.eu/949/",
     "siri": "http://www.siri.org.uk/siri#",
-    "xsd": "http://www.w3.org/2001/XMLSchema#"
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "geo": "http://www.w3.org/2003/01/geo/wgs84_pos#"
   },
-  "@id": "http://transport.example.org/connections/20260205/RUT:ServiceJourney:456/3",
+  "@id": "http://transport.example.org/connections/202602050832/RUT:ServiceJourney:456/3",
   "@type": "lc:Connection",
   "lc:departureStop": {
     "@id": "http://transport.example.org/stops/NSR:StopPlace:123"
@@ -545,8 +590,8 @@ netex2lc/
 │   │   ├── siri_parser.py       # SIRI XML parser
 │   │   └── validators.py        # SHACL/XSD validation
 │   ├── transformers/
-│   │   ├── netex_to_rdf.py      # NeTEx → RDF (data.europa.eu/949)
-│   │   ├── rdf_to_lc.py         # RDF → Linked Connections
+│   │   ├── netex_to_lc.py       # NeTEx → Linked Connections (direct)
+│   │   ├── netex_to_rdf.py      # NeTEx → RDF (optional output)
 │   │   └── siri_to_lc.py        # SIRI → Linked Connections
 │   ├── models/
 │   │   ├── linked_connection.py  # LinkedConnection data model
@@ -612,6 +657,9 @@ output:
   destination: /data/output/connections/
   page_size: 100  # connections per page
   fragment_by: time  # time | route | operator
+  store: sqlite  # memory | sqlite | lmdb
+  store_path: /data/output/.store
+  compressed: true
 
 uris:
   base_uri: http://transport.example.org
@@ -620,7 +668,7 @@ uris:
     quay: "{base_uri}/stops/{stopPlaceId}/quays/{quayId}"
     line: "{base_uri}/lines/{lineId}"
     service_journey: "{base_uri}/journeys/{serviceJourneyId}"
-    connection: "{base_uri}/connections/{departureTime(yyyyMMdd)}/{serviceJourneyId}/{sequence}"
+    connection: "{base_uri}/connections/{departureTime(yyyyMMddHHmm)}/{serviceJourneyId}/{sequence}"
     operator: "{base_uri}/operators/{operatorId}"
 
 ontology:
@@ -672,6 +720,9 @@ netex2lc --config config.yaml --serve --port 8080
 
 # Generate fragmented output (routable tiles)
 netex2lc --input netex.xml --fragment-by time --fragment-size PT1H
+
+# Large feeds (disk-backed store + compression)
+netex2lc --input netex.xml --store sqlite --compressed --output /data/lc/static/
 ```
 
 #### SIRI2LC
@@ -748,10 +799,11 @@ for updated_connection in siri_converter.stream_updates(interval=30):
 
 **Objectives**:
 - ✅ Parse NeTEx XML files (SiteFrame, ServiceFrame, TimetableFrame)
-- ✅ Map to data.europa.eu/949 RDF ontology
+- ✅ Optional RDF-aligned output using data.europa.eu/949
 - ✅ Generate Linked Connections from ServiceJourneys
 - ✅ Implement URI strategy (RFC 6570)
 - ✅ Support JSON-LD and Turtle output
+- ✅ Optional disk-backed store + streaming output
 
 **Deliverables**:
 - `netex2lc` Python package (v0.1.0)
@@ -793,6 +845,7 @@ for updated_connection in siri_converter.stream_updates(interval=30):
 - ✅ SPARQL endpoint setup
 - ✅ Performance optimization
 - ✅ CDN integration
+- ✅ Optional join/split post-processing
 
 **Deliverables**:
 - HTTP server component
